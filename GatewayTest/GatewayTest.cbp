@@ -14,6 +14,10 @@
 				<Compiler>
 					<Add option="-g" />
 				</Compiler>
+				<Linker>
+					<Add library="../libGatewayClient/bin/Debug/libGatewayClient.a" />
+					<Add library="curl" />
+				</Linker>
 			</Target>
 			<Target title="Release">
 				<Option output="bin/Release/GatewayTest" prefix_auto="1" extension_auto="1" />
@@ -25,12 +29,15 @@
 				</Compiler>
 				<Linker>
 					<Add option="-s" />
+					<Add library="../libGatewayClient/bin/Release/libGatewayClient.a" />
+					<Add library="curk" />
 				</Linker>
 			</Target>
 		</Build>
 		<Compiler>
 			<Add option="-Wall" />
 		</Compiler>
+		<Unit filename="../libGatewayClient/include/libGateway_C_API.h" />
 		<Unit filename="main.c">
 			<Option compilerVar="CC" />
 		</Unit>

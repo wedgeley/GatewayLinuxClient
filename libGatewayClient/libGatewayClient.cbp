@@ -36,7 +36,9 @@
 				</Linker>
 			</Target>
 		</Build>
+		<Unit filename="GatewayAPI.cpp" />
 		<Unit filename="JsonBuffer.cpp" />
+		<Unit filename="include/GatewayAPI.h" />
 		<Unit filename="include/JsonBuffer.h" />
 		<Unit filename="include/libGateway_C_API.h" />
 		<Unit filename="json/json-forwards.h" />

@@ -1,0 +1,8 @@
+# depslib dependency file v1.0
+1508332488 source:/home/phil/Documents/GatewayTest/main.c
+	<stdio.h>
+	<stdlib.h>
+	"../libGatewayClient/include/libGateway_C_API.h"
+
+1508332476 /home/phil/Documents/libGatewayClient/include/libGateway_C_API.h
+

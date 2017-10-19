@@ -6,7 +6,7 @@
 int main()
 {
     char serialNumber[80];
-    GatewayReturnCodes status = LookupGatewaySerialNumber("http://192.168.2.3:8081", serialNumber, 80);
+    GatewayReturnCodes status = LookupGatewaySerialNumber("http://192.168.2.3:8080", serialNumber, 80);
     if (IsSuccess(status))
     {
         fprintf(stdout, "Serial number is %s\n", serialNumber);

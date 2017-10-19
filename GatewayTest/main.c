@@ -3,13 +3,18 @@
 #include <stdbool.h>
 
 #include "../libGatewayClient/include/gway_api.h"
+
 int main()
 {
+    const char* url = "http://192.168.2.3:8080";
+    fprintf(stdout, "Querying %s...\n", url);
+
     char serialNumber[80];
-    GatewayReturnCodes status = LookupGatewaySerialNumber("http://192.168.2.3:8080", serialNumber, 80);
+    GatewayReturnCodes status = LookupGatewaySerialNumber(url, serialNumber, 80);
+
     if (IsSuccess(status))
     {
-        fprintf(stdout, "Serial number is %s\n", serialNumber);
+        fprintf(stdout, "Gateway found!  Serial number is %s\n", serialNumber);
     }
     else
     {

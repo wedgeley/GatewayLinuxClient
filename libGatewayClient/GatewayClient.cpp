@@ -18,7 +18,7 @@ GatewayReturnCodes GatewayClient::LookupGatewaySerialNumber(std::string& serialN
     GatewayReturnCodes status = GWAY_SUCCESS;
 
     Json::Value jsonRoot;
-    status = PerformLookup("Gateway", "Identify", jsonRoot);
+    status = PerformLookup(TIMEOUT_CONNECT_SECS, "Gateway", "Identify", jsonRoot);
     if (status == GWAY_SUCCESS)
     {
         serialNumber = jsonRoot.get("SerialNumber", "").asCString();
@@ -30,7 +30,7 @@ GatewayReturnCodes GatewayClient::LookupGatewaySerialNumber(std::string& serialN
 //
 //  Performs a lookup and returns the resulting JSON value
 //
-GatewayReturnCodes GatewayClient::PerformLookup(const char* controller, const char* action, Json::Value& jsonValue)
+GatewayReturnCodes GatewayClient::PerformLookup(long timeoutSecs, const char* controller, const char* action, Json::Value& jsonValue)
 {
     GatewayReturnCodes status = GWAY_SUCCESS;
     CURLcode res;
@@ -42,8 +42,10 @@ GatewayReturnCodes GatewayClient::PerformLookup(const char* controller, const ch
     // Specify URL to get
     char fullUrl[180];
     snprintf(fullUrl, 180, "%s/api/%s/%s", _url, controller, action);
-
     res = curl_easy_setopt(_pCurlHandle, CURLOPT_URL, fullUrl);
+
+    // Timeout for this lookup
+    if (res == CURLE_OK) res = curl_easy_setopt(_pCurlHandle, CURLOPT_TIMEOUT, timeoutSecs);
 
     // Send all data to the buffer function
     if (res == CURLE_OK) res = curl_easy_setopt(_pCurlHandle, CURLOPT_WRITEFUNCTION, _buffer.WriteMemoryCallback);

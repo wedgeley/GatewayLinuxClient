@@ -9,12 +9,12 @@ extern "C"
 GatewayReturnCodes LookupGatewaySerialNumber(const char* url, char* buffer, uint length)
 {
     GatewayReturnCodes status = GWAY_SUCCESS;
+    GatewayClient client(url);
 
-    GatewayClient client;
     std::string serialNumber;
-    status = client.LookupGatewaySerialNumber(url, serialNumber);
+    status = client.LookupGatewaySerialNumber(serialNumber);
 
-    if (status == GWAY_SUCCESS && serialNumber.length() >= length)
+    if (status == GWAY_SUCCESS && serialNumber.length() >= (length - 1))
     {
         // Insufficient room for the serial number
         status = GWAY_BUFFER_TOO_SMALL;

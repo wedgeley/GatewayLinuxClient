@@ -1,7 +1,9 @@
 #include "GatewayClient.h"
 
-GatewayClient::GatewayClient()
+GatewayClient::GatewayClient(const char* url)
 {
+    _url = url;
+
     curl_global_init(CURL_GLOBAL_ALL);
 
     /* init the curl session */
@@ -11,12 +13,12 @@ GatewayClient::GatewayClient()
 //
 //  Returns serial number for the specified gateway
 //
-GatewayReturnCodes GatewayClient::LookupGatewaySerialNumber(const char* url, std::string& serialNumber)
+GatewayReturnCodes GatewayClient::LookupGatewaySerialNumber(std::string& serialNumber)
 {
     GatewayReturnCodes status = GWAY_SUCCESS;
 
     Json::Value jsonRoot;
-    status = PerformLookup(url, "Gateway", "Identify", jsonRoot);
+    status = PerformLookup("Gateway", "Identify", jsonRoot);
     if (status == GWAY_SUCCESS)
     {
         serialNumber = jsonRoot.get("SerialNumber", "").asCString();
@@ -28,34 +30,46 @@ GatewayReturnCodes GatewayClient::LookupGatewaySerialNumber(const char* url, std
 //
 //  Performs a lookup and returns the resulting JSON value
 //
-GatewayReturnCodes GatewayClient::PerformLookup(const char* url, const char* controller, const char* action, Json::Value& jsonValue)
+GatewayReturnCodes GatewayClient::PerformLookup(const char* controller, const char* action, Json::Value& jsonValue)
 {
+    GatewayReturnCodes status = GWAY_SUCCESS;
     CURLcode res;
 
-    /* Specify URL to get */
+    // Error text
+    char errorMessage[CURL_ERROR_SIZE];
+    curl_easy_setopt(_pCurlHandle, CURLOPT_ERRORBUFFER, errorMessage);
+
+    // Specify URL to get
     char fullUrl[180];
-    snprintf(fullUrl, 180, "%s/api/%s/%s", url, controller, action);
-    printf("url is [%s]\n", fullUrl);
+    snprintf(fullUrl, 180, "%s/api/%s/%s", _url, controller, action);
 
+    res = curl_easy_setopt(_pCurlHandle, CURLOPT_URL, fullUrl);
 
-    curl_easy_setopt(_pCurlHandle, CURLOPT_URL, fullUrl);
-    /* Send all data to this function and pass it our buffer  */
-    curl_easy_setopt(_pCurlHandle, CURLOPT_WRITEFUNCTION, _buffer.WriteMemoryCallback);
-    curl_easy_setopt(_pCurlHandle, CURLOPT_WRITEDATA, (void *)&_buffer);
+    // Send all data to the buffer function
+    if (res == CURLE_OK) res = curl_easy_setopt(_pCurlHandle, CURLOPT_WRITEFUNCTION, _buffer.WriteMemoryCallback);
+    if (res == CURLE_OK) res = curl_easy_setopt(_pCurlHandle, CURLOPT_WRITEDATA, (void *)&_buffer);
 
-    /* Some servers don't like requests that are made without a user-agent field, so we provide one */
-    curl_easy_setopt(_pCurlHandle, CURLOPT_USERAGENT, "libcurl-agent/1.0");
+    // Some servers don't like requests that are made without a user-agent field, so we provide one
+    if (res == CURLE_OK) res = curl_easy_setopt(_pCurlHandle, CURLOPT_USERAGENT, "libcurl-agent/1.0");
 
-    /* Perform the lookup */
-    res = curl_easy_perform(_pCurlHandle);
+    // Perform the lookup
+    if (res == CURLE_OK) res = curl_easy_perform(_pCurlHandle);
 
-    /* Check for errors */
-    if (res != CURLE_OK) return GWAY_SERVER_UNAVAILABLE;
+    // Check for errors
+    if (res != CURLE_OK)
+    {
+        fprintf(stderr, "Error: Curl error code %d:\n", res);
+        fprintf(stderr, "       \"%s\"\n", errorMessage);
+        status = GWAY_SERVER_UNAVAILABLE;
+    }
 
-    // Decipher the block of json returned
-    // printf("Received:\n%s\n", _buffer.AsString().c_str());
-    jsonValue = _buffer.AsJson();
-    return GWAY_SUCCESS;
+    if (IsSuccess(status))
+    {
+        // Decipher the block of json returned
+        status = _buffer.ToJson(jsonValue);
+    }
+
+    return status;
 }
 
 GatewayClient::~GatewayClient()

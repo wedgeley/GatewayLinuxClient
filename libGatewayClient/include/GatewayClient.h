@@ -9,18 +9,19 @@
 class GatewayClient
 {
     public:
-        GatewayClient();
+        GatewayClient(const char* url);
         virtual ~GatewayClient();
 
-        GatewayReturnCodes LookupGatewaySerialNumber(const char* url, std::string& serialNumber);
+        GatewayReturnCodes LookupGatewaySerialNumber(std::string& serialNumber);
 
     protected:
 
     private:
-        GatewayReturnCodes PerformLookup(const char* url, const char* controller, const char* action, Json::Value& jsonRoot);
+        GatewayReturnCodes PerformLookup(const char* controller, const char* action, Json::Value& jsonRoot);
 
         CURL* _pCurlHandle;
         JsonBuffer _buffer;
+        const char* _url;
 
 };
 

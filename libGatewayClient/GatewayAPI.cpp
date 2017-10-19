@@ -11,19 +11,24 @@ GatewayAPI::GatewayAPI()
 //
 //  Returns serial number for the specified gateway
 //
-std::string GatewayAPI::LookupGatewaySerialNumber(const char* url)
+GatewayReturnCodes GatewayAPI::LookupGatewaySerialNumber(const char* url, std::string& serialNumber)
 {
-    Json::Value jsonRoot = PerformLookup(url, "Gateway", "Identify");
-    if (jsonRoot == NULL) return "";
+    GatewayReturnCodes status = GWAY_SUCCESS;
 
-    std::string serialNumber = jsonRoot.get("SerialNumber", "").asCString();
-    return serialNumber;
+    Json::Value jsonRoot;
+    status = PerformLookup(url, "Gateway", "Identify", jsonRoot);
+    if (status == GWAY_SUCCESS)
+    {
+        serialNumber = jsonRoot.get("SerialNumber", "").asCString();
+    }
+
+    return status;
 }
 
 //
 //  Performs a lookup and returns the resulting JSON value
 //
-Json::Value GatewayAPI::PerformLookup(const char* url, const char* controller, const char* action)
+GatewayReturnCodes GatewayAPI::PerformLookup(const char* url, const char* controller, const char* action, Json::Value& jsonValue)
 {
     CURLcode res;
 
@@ -45,12 +50,12 @@ Json::Value GatewayAPI::PerformLookup(const char* url, const char* controller, c
     res = curl_easy_perform(_pCurlHandle);
 
     /* Check for errors */
-    if (res != CURLE_OK) return NULL;
+    if (res != CURLE_OK) return GWAY_SERVER_UNAVAILABLE;
 
     // Decipher the block of json returned
     // printf("Received:\n%s\n", _buffer.AsString().c_str());
-    Json::Value jsonRoot = _buffer.AsJson();
-    return jsonRoot;
+    jsonValue = _buffer.AsJson();
+    return GWAY_SUCCESS;
 }
 
 GatewayAPI::~GatewayAPI()

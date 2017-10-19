@@ -4,6 +4,7 @@
 #include <string>
 #include <curl/curl.h>
 #include "JsonBuffer.h"
+#include "gway_errors.h"
 
 class GatewayAPI
 {
@@ -11,12 +12,12 @@ class GatewayAPI
         GatewayAPI();
         virtual ~GatewayAPI();
 
-        std::string LookupGatewaySerialNumber(const char* url);
+        GatewayReturnCodes LookupGatewaySerialNumber(const char* url, std::string& serialNumber);
 
     protected:
 
     private:
-        Json::Value PerformLookup(const char* url, const char* controller, const char* action);
+        GatewayReturnCodes PerformLookup(const char* url, const char* controller, const char* action, Json::Value& jsonRoot);
 
         CURL* _pCurlHandle;
         JsonBuffer _buffer;

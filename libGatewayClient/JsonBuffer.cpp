@@ -1,4 +1,5 @@
 #include "JsonBuffer.h"
+#include "gway_errors.h"
 
 JsonBuffer::JsonBuffer()
 {
@@ -12,21 +13,22 @@ JsonBuffer::JsonBuffer()
 //
 size_t JsonBuffer::WriteMemoryCallback(void *contents, size_t size, size_t nmemb, void *jsonBuffer)
 {
-  size_t realsize = size * nmemb;
-  JsonBuffer* pBuffer = (JsonBuffer*)jsonBuffer;
+    size_t realsize = size * nmemb;
+    JsonBuffer* pBuffer = (JsonBuffer*)jsonBuffer;
 
-  pBuffer->_pMemory = (char*)realloc(pBuffer->_pMemory, pBuffer->_size + realsize + 1);
-  if(pBuffer->_pMemory == NULL) {
-    /* out of memory! */
-    printf("not enough memory (realloc returned NULL)\n");
-    return 0;
-  }
+    pBuffer->_pMemory = (char*)realloc(pBuffer->_pMemory, pBuffer->_size + realsize + 1);
+    if(pBuffer->_pMemory == NULL)
+    {
+        /* out of memory! */
+        printf("not enough memory (realloc returned NULL)\n");
+        return 0;
+    }
 
-  memcpy(&(pBuffer->_pMemory[pBuffer->_size]), contents, realsize);
-  pBuffer->_size += realsize;
-  pBuffer->_pMemory[pBuffer->_size] = 0;
+    memcpy(&(pBuffer->_pMemory[pBuffer->_size]), contents, realsize);
+    pBuffer->_size += realsize;
+    pBuffer->_pMemory[pBuffer->_size] = 0;
 
-  return realsize;
+    return realsize;
 }
 
 //

@@ -1,8 +1,11 @@
 #ifndef EXTERNALAPI_H_INCLUDED
 #define EXTERNALAPI_H_INCLUDED
 
-int SampleAddInt(int i1, int i2);
+#include "gway_errors.h"
 
-void LookupGatewaySerialNumber(const char* url, char* buffer, uint length);
+#ifdef __cplusplus
+extern "C"
+#endif // __cplusplus
+GatewayReturnCodes LookupGatewaySerialNumber(const char* url, char* buffer, uint length);
 
 #endif // EXTERNALAPI_H_INCLUDED

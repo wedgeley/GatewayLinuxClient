@@ -1,25 +1,29 @@
 #include <string>
 #include "GatewayAPI.h"
+#include "libGateway_C_API.h"
 
-
-// Test function adding two integers and returning the result
-extern "C"
-int SampleAddInt(int i1, int i2)
-{
-    return i1 + i2;
-}
 
 // Requests serial number from the Gateway
 // Writes the serial number into the supplied buffer
 extern "C"
-void LookupGatewaySerialNumber(const char* url, char* buffer, uint length)
+GatewayReturnCodes LookupGatewaySerialNumber(const char* url, char* buffer, uint length)
 {
-    GatewayAPI api;
-    std::string serialNumber = api.LookupGatewaySerialNumber(url);
+    GatewayReturnCodes status = GWAY_SUCCESS;
 
-    if (serialNumber.length() < length)
+    GatewayAPI api;
+    std::string serialNumber;
+    status = api.LookupGatewaySerialNumber(url, serialNumber);
+
+    if (status == GWAY_SUCCESS && serialNumber.length() >= length)
     {
-        // Sufficient room for the serial number
+        // Insufficient room for the serial number
+        status = GWAY_BUFFER_TOO_SMALL;
+    }
+
+    if (status == GWAY_SUCCESS)
+    {
         strcpy(buffer, serialNumber.c_str());
     }
+
+    return status;
 }

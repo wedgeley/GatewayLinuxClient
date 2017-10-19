@@ -3,6 +3,7 @@
 
 //
 //  Return codes for all API functions
+//  Keep ErrorDescription() function up to date
 //
 typedef enum
 {
@@ -23,5 +24,12 @@ extern "C"
 #endif // __cplusplus
 bool IsSuccess(GatewayReturnCodes code);
 
+//
+//  Returns text description for an error code
+//
+#ifdef __cplusplus
+extern "C"
+#endif // __cplusplus
+const char* ErrorDescription(GatewayReturnCodes code);
 
 #endif // GWAY_ERRORS_H_INCLUDED

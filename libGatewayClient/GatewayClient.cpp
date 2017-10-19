@@ -1,6 +1,6 @@
-#include "GatewayAPI.h"
+#include "GatewayClient.h"
 
-GatewayAPI::GatewayAPI()
+GatewayClient::GatewayClient()
 {
     curl_global_init(CURL_GLOBAL_ALL);
 
@@ -11,7 +11,7 @@ GatewayAPI::GatewayAPI()
 //
 //  Returns serial number for the specified gateway
 //
-GatewayReturnCodes GatewayAPI::LookupGatewaySerialNumber(const char* url, std::string& serialNumber)
+GatewayReturnCodes GatewayClient::LookupGatewaySerialNumber(const char* url, std::string& serialNumber)
 {
     GatewayReturnCodes status = GWAY_SUCCESS;
 
@@ -28,7 +28,7 @@ GatewayReturnCodes GatewayAPI::LookupGatewaySerialNumber(const char* url, std::s
 //
 //  Performs a lookup and returns the resulting JSON value
 //
-GatewayReturnCodes GatewayAPI::PerformLookup(const char* url, const char* controller, const char* action, Json::Value& jsonValue)
+GatewayReturnCodes GatewayClient::PerformLookup(const char* url, const char* controller, const char* action, Json::Value& jsonValue)
 {
     CURLcode res;
 
@@ -58,7 +58,7 @@ GatewayReturnCodes GatewayAPI::PerformLookup(const char* url, const char* contro
     return GWAY_SUCCESS;
 }
 
-GatewayAPI::~GatewayAPI()
+GatewayClient::~GatewayClient()
 {
     /* cleanup curl stuff */
     curl_easy_cleanup(_pCurlHandle);

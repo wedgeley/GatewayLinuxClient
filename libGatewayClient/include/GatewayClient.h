@@ -6,11 +6,11 @@
 #include "JsonBuffer.h"
 #include "gway_errors.h"
 
-class GatewayAPI
+class GatewayClient
 {
     public:
-        GatewayAPI();
-        virtual ~GatewayAPI();
+        GatewayClient();
+        virtual ~GatewayClient();
 
         GatewayReturnCodes LookupGatewaySerialNumber(const char* url, std::string& serialNumber);
 

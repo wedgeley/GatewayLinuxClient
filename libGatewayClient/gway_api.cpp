@@ -1,6 +1,6 @@
 #include <string>
-#include "GatewayAPI.h"
-#include "libGateway_C_API.h"
+#include "GatewayClient.h"
+#include "gway_api.h"
 
 
 // Requests serial number from the Gateway
@@ -10,9 +10,9 @@ GatewayReturnCodes LookupGatewaySerialNumber(const char* url, char* buffer, uint
 {
     GatewayReturnCodes status = GWAY_SUCCESS;
 
-    GatewayAPI api;
+    GatewayClient client;
     std::string serialNumber;
-    status = api.LookupGatewaySerialNumber(url, serialNumber);
+    status = client.LookupGatewaySerialNumber(url, serialNumber);
 
     if (status == GWAY_SUCCESS && serialNumber.length() >= length)
     {

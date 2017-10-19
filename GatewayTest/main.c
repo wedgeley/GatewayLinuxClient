@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <stdbool.h>
 
-#include "../libGatewayClient/include/libGateway_C_API.h"
+#include "../libGatewayClient/include/gway_api.h"
 int main()
 {
     char serialNumber[80];

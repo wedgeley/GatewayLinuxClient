@@ -19,6 +19,7 @@ const char* ErrorDescription(GatewayReturnCodes code)
     {
         case GWAY_SUCCESS:              return "Success";
         case GWAY_BUFFER_TOO_SMALL:     return "The buffer passed into the function was not big enough for the result";
+        case GWAY_ARRAY_TOO_SMALL:      return "The array passed into the function was not big enough for the result";
         case GWAY_SERVER_UNAVAILABLE:   return "Failed to contact Gateway";
         case GWAY_OUT_OF_MEMORY:        return "Memory allocation failure";
         case GWAY_JSON_PARSE_ERROR:     return "Failed to parse JSON returned from lookup";

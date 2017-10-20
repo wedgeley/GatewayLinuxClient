@@ -16,12 +16,14 @@ class GatewayClient
         virtual ~GatewayClient();
 
         GatewayReturnCodes LookupGatewaySerialNumber(std::string& serialNumber);
+        GatewayReturnCodes ListAllKeys(const char* controllerSerialNumber, std::vector<std::string>& keycodes);
 
     protected:
 
     private:
+        GatewayReturnCodes PerformLookup(long timeoutSecs, const char* controller, const char* action, const char* paramKey, const char* paramValue, Json::Value& jsonValue);
         GatewayReturnCodes PerformLookup(long timeoutSecs, const char* controller, const char* action, Json::Value& jsonRoot);
-
+        GatewayReturnCodes PerformLookup(long timeoutSecs, const char* url, Json::Value& jsonRoot);
         CURL* _pCurlHandle;
         JsonBuffer _buffer;
         const char* _url;

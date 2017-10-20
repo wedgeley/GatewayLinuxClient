@@ -1,4 +1,5 @@
 #include "GatewayClient.h"
+#include "json/json.h"
 
 GatewayClient::GatewayClient(const char* url)
 {
@@ -11,7 +12,7 @@ GatewayClient::GatewayClient(const char* url)
 }
 
 //
-//  Returns serial number for the specified gateway
+//  Fetches serial number for the gateway
 //
 GatewayReturnCodes GatewayClient::LookupGatewaySerialNumber(std::string& serialNumber)
 {
@@ -21,7 +22,30 @@ GatewayReturnCodes GatewayClient::LookupGatewaySerialNumber(std::string& serialN
     status = PerformLookup(TIMEOUT_CONNECT_SECS, "Gateway", "Identify", jsonRoot);
     if (status == GWAY_SUCCESS)
     {
-        serialNumber = jsonRoot.get("SerialNumber", "").asCString();
+        serialNumber = jsonRoot.get("SerialNumber", "").asString();
+    }
+
+    return status;
+}
+
+//
+//  Fetches all keys for the controller with the specified serial number
+//
+GatewayReturnCodes GatewayClient::ListAllKeys(const char* controllerSerialNumber, std::vector<std::string>& keycodes)
+{
+    GatewayReturnCodes status = GWAY_SUCCESS;
+
+    Json::Value jsonRoot;
+    status = PerformLookup(TIMEOUT_DATA_SECS, "Key", "ListAll", "ControllerSerialNumber", controllerSerialNumber, jsonRoot);
+    if (status == GWAY_SUCCESS)
+    {
+        if (jsonRoot.isArray())
+        {
+            for (uint i=0 ; i < jsonRoot.size(); i++)
+            {
+                keycodes.push_back(jsonRoot[i].get("Keycode", "").asString());
+            }
+        }
     }
 
     return status;
@@ -29,8 +53,34 @@ GatewayReturnCodes GatewayClient::LookupGatewaySerialNumber(std::string& serialN
 
 //
 //  Performs a lookup and returns the resulting JSON value
+//  This overload takes a single parameter
+//
+GatewayReturnCodes GatewayClient::PerformLookup(long timeoutSecs, const char* controller, const char* action, const char* paramKey, const char* paramValue, Json::Value& jsonValue)
+{
+    // Specify URL to get
+    char fullUrl[180];
+    snprintf(fullUrl, 180, "%s/api/%s/%s?%s=%s", _url, controller, action, paramKey, paramValue);
+    return PerformLookup(timeoutSecs, fullUrl, jsonValue);
+}
+
+//
+//  Performs a lookup and returns the resulting JSON value
+//  This overload takes no parameters
 //
 GatewayReturnCodes GatewayClient::PerformLookup(long timeoutSecs, const char* controller, const char* action, Json::Value& jsonValue)
+{
+    // Specify URL to get
+    char fullUrl[180];
+    snprintf(fullUrl, 180, "%s/api/%s/%s", _url, controller, action);
+    return PerformLookup(timeoutSecs, fullUrl, jsonValue);
+}
+
+
+//
+//  Performs a lookup and returns the resulting JSON value
+//  This overload takes the request url
+//
+GatewayReturnCodes GatewayClient::PerformLookup(long timeoutSecs, const char* url, Json::Value& jsonValue)
 {
     GatewayReturnCodes status = GWAY_SUCCESS;
     CURLcode res;
@@ -39,10 +89,7 @@ GatewayReturnCodes GatewayClient::PerformLookup(long timeoutSecs, const char* co
     char errorMessage[CURL_ERROR_SIZE];
     curl_easy_setopt(_pCurlHandle, CURLOPT_ERRORBUFFER, errorMessage);
 
-    // Specify URL to get
-    char fullUrl[180];
-    snprintf(fullUrl, 180, "%s/api/%s/%s", _url, controller, action);
-    res = curl_easy_setopt(_pCurlHandle, CURLOPT_URL, fullUrl);
+    res = curl_easy_setopt(_pCurlHandle, CURLOPT_URL, url);
 
     // Timeout for this lookup
     if (res == CURLE_OK) res = curl_easy_setopt(_pCurlHandle, CURLOPT_TIMEOUT, timeoutSecs);

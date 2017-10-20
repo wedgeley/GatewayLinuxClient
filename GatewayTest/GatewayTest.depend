@@ -6,14 +6,14 @@
 
 1508332476 /home/phil/Documents/libGatewayClient/include/libGateway_C_API.h
 
-1508411766 source:/home/phil/Documents/repos/GatewayLinuxClient/GatewayTest/main.c
+1508524766 source:/home/phil/Documents/repos/GatewayLinuxClient/GatewayTest/main.c
 	<stdio.h>
 	<stdlib.h>
 	<stdbool.h>
 	"../libGatewayClient/include/gway_api.h"
 
-1508410407 /home/phil/Documents/repos/GatewayLinuxClient/libGatewayClient/include/gway_api.h
+1508524648 /home/phil/Documents/repos/GatewayLinuxClient/libGatewayClient/include/gway_api.h
 	"gway_errors.h"
 
-1508419456 /home/phil/Documents/repos/GatewayLinuxClient/libGatewayClient/include/gway_errors.h
+1508523915 /home/phil/Documents/repos/GatewayLinuxClient/libGatewayClient/include/gway_errors.h
 

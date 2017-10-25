@@ -1,5 +1,5 @@
 #include "GatewayClient.h"
-#include "json/json.h"
+#include "JsonConverter.h"
 
 GatewayClient::GatewayClient(const char* url)
 {
@@ -114,8 +114,21 @@ GatewayReturnCodes GatewayClient::PerformLookup(long timeoutSecs, const char* ur
 
     if (IsSuccess(status))
     {
+        // Verify that the buffer is valid
+        status = _buffer.CheckBuffer();
+    }
+
+    std::string messageBody;
+    if (IsSuccess(status))
+    {
+        // Decrypt the data
+        status = _encryptor.Decrypt(_buffer.BufferPtr, _buffer.BufferSize, messageBody);
+    }
+
+    if (IsSuccess(status))
+    {
         // Decipher the block of json returned
-        status = _buffer.ToJson(jsonValue);
+        status = JsonConverter::ToJson(messageBody, jsonValue);
     }
 
     return status;

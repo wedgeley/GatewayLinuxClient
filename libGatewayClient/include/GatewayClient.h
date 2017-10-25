@@ -3,8 +3,9 @@
 
 #include <string>
 #include <curl/curl.h>
-#include "JsonBuffer.h"
+#include "MessageBuffer.h"
 #include "gway_errors.h"
+#include "Encryptor.h"
 
 #define TIMEOUT_CONNECT_SECS    10         // Timeout for initial connection
 #define TIMEOUT_DATA_SECS       10 * 60    // Timeout for data lookup
@@ -25,7 +26,8 @@ class GatewayClient
         GatewayReturnCodes PerformLookup(long timeoutSecs, const char* controller, const char* action, Json::Value& jsonRoot);
         GatewayReturnCodes PerformLookup(long timeoutSecs, const char* url, Json::Value& jsonRoot);
         CURL* _pCurlHandle;
-        JsonBuffer _buffer;
+        MessageBuffer _buffer;
+        Encryptor _encryptor;
         const char* _url;
 
 };

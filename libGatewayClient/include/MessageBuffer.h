@@ -1,5 +1,5 @@
-#ifndef JSONBUFFER_H
-#define JSONBUFFER_H
+#ifndef MESSAGEBUFFER_H
+#define MESSAGEBUFFER_H
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -7,24 +7,23 @@
 #include "gway_errors.h"
 #include "../json/json.h"
 
-class JsonBuffer
+class MessageBuffer
 {
     public:
-        JsonBuffer();
-        virtual ~JsonBuffer();
+        MessageBuffer();
+        virtual ~MessageBuffer();
 
         static size_t WriteMemoryCallback(void *contents, size_t size, size_t nmemb, void *jsonBuffer);
 
-        GatewayReturnCodes ToJson(Json::Value& jsonRoot);
+        GatewayReturnCodes CheckBuffer();
         GatewayReturnCodes ToString(std::string& text);
+
+        char *BufferPtr;
+        size_t BufferSize;
 
     protected:
 
     private:
-        char *_pMemory;
-        size_t _size;
-
-        GatewayReturnCodes CheckBuffer();
 };
 
-#endif // JSONBUFFER_H
+#endif // MESSAGEBUFFER_H

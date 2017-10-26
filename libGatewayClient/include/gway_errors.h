@@ -7,7 +7,7 @@
 //
 typedef enum
 {
-    GWAY_SUCCESS = 1,
+    GWAY_SUCCESS = 1,                   // Success
     GWAY_BUFFER_TOO_SMALL = 2,          // The buffer passed into the function was not big enough for the result
     GWAY_ARRAY_TOO_SMALL = 3,           // The array passed into the function was not big enough for the result
     GWAY_SERVER_UNAVAILABLE = 4,        // Failed to contact Gateway

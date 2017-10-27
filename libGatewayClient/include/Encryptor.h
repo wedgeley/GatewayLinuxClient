@@ -44,7 +44,7 @@ class Encryptor
             IV[15] = 97;
         }
 
-        GatewayReturnCodes Decrypt(const char* encrypted, int encryptedSize, std::string& decrypted);
+        GatewayReturnCodes Decrypt(const char* encrypted, size_t encryptedSize, std::string& decrypted);
 
     protected:
 

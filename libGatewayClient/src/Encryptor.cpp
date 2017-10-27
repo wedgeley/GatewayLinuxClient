@@ -5,7 +5,7 @@
 //
 //  Decrypts a text string
 //
-GatewayReturnCodes Encryptor::Decrypt(const char* encrypted, int encryptedSize, std::string& decryptedStr)
+GatewayReturnCodes Encryptor::Decrypt(const char* encrypted, size_t encryptedSize, std::string& decryptedStr)
 {
     GatewayReturnCodes status = GWAY_SUCCESS;
 
@@ -14,12 +14,17 @@ GatewayReturnCodes Encryptor::Decrypt(const char* encrypted, int encryptedSize, 
     CRijndael oRijndael;
     oRijndael.MakeKey(Key, IV, 16, 16);
 
-    // TODO: Change this buffer size to be dynamic
-    char decrypted[257];
-    memset(decrypted, 0, 257);
-    oRijndael.Decrypt(encryptedStr.c_str(), decrypted, 256, CRijndael::CBC);
+    // Buffer size must be a multiple of 16
+    size_t decryptedSize = (1 + encryptedSize/16) * 16;
 
-    decryptedStr = decrypted;
+    // Allocate characters for the output buffer
+    char* pDecrypted = new char[decryptedSize + 1];
+    memset(pDecrypted, 0, decryptedSize + 1);
+
+    oRijndael.Decrypt(encryptedStr.c_str(), pDecrypted, decryptedSize, CRijndael::CBC);
+
+    decryptedStr = pDecrypted;
+    delete pDecrypted;
 
     return status;
 }

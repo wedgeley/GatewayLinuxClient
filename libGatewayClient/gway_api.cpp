@@ -6,7 +6,7 @@
 // Requests serial number from the Gateway
 // Writes the serial number into the supplied buffer
 extern "C"
-GatewayReturnCodes LookupGatewaySerialNumber(const char* url, char* buffer, uint length)
+GatewayReturnCodes LookupGatewaySerialNumber(const char* url, char* buffer, size_t length)
 {
     GatewayReturnCodes status = GWAY_SUCCESS;
     GatewayClient client(url);
@@ -30,7 +30,7 @@ GatewayReturnCodes LookupGatewaySerialNumber(const char* url, char* buffer, uint
 
 // Requests all keys for the controller with the specified serial number
 extern "C"
-GatewayReturnCodes ListAllKeys(const char* url, const char* controllerSerialNumber, char* buffer[], uint keyCodeSize, uint numberOfKeycodes, int* returnedKeyCount)
+GatewayReturnCodes ListAllKeys(const char* url, const char* controllerSerialNumber, char* buffer[], size_t keyCodeSize, uint numberOfKeycodes, int* returnedKeyCount)
 {
     GatewayReturnCodes status = GWAY_SUCCESS;
     *returnedKeyCount = 0;

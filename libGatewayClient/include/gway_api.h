@@ -6,11 +6,11 @@
 #ifdef __cplusplus
 extern "C"
 #endif // __cplusplus
-GatewayReturnCodes LookupGatewaySerialNumber(const char* url, char* buffer, uint length);
+GatewayReturnCodes LookupGatewaySerialNumber(const char* url, char* buffer, size_t length);
 
 #ifdef __cplusplus
 extern "C"
 #endif // __cplusplus
-GatewayReturnCodes ListAllKeys(const char* url, const char* controllerSerialNumber, char* buffer[], uint keycodeSize, uint numberOfKeycodes, int* returnedKeyCount);
+GatewayReturnCodes ListAllKeys(const char* url, const char* controllerSerialNumber, char* buffer[], size_t keycodeSize, uint numberOfKeycodes, int* returnedKeyCount);
 
 #endif // EXTERNALAPI_H_INCLUDED

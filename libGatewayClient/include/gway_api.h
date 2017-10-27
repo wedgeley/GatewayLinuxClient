@@ -6,7 +6,7 @@
 #ifdef __cplusplus
 extern "C"
 #endif // __cplusplus
-GatewayReturnCodes LookupGatewaySerialNumber(const char* url, char* buffer, size_t length);
+GatewayReturnCodes LookupGatewaySerialNumber(const char* url, char* buffer, size_t bufferLength);
 
 #ifdef __cplusplus
 extern "C"

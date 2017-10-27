@@ -1,12 +1,13 @@
 # depslib dependency file v1.0
-1508525280 source:/home/phil/Documents/repos/GatewayLinuxClient/GatewayTest/main.c
+1509100401 source:/home/phil/Documents/repos/GatewayLinuxClient/GatewayTest/main.c
 	<stdio.h>
 	<stdlib.h>
 	<stdbool.h>
+	<string.h>
 	"../libGatewayClient/include/gway_api.h"
 
-1508525095 /home/phil/Documents/repos/GatewayLinuxClient/libGatewayClient/include/gway_api.h
+1509097712 /home/phil/Documents/repos/GatewayLinuxClient/libGatewayClient/include/gway_api.h
 	"gway_errors.h"
 
-1508523915 /home/phil/Documents/repos/GatewayLinuxClient/libGatewayClient/include/gway_errors.h
+1509041099 /home/phil/Documents/repos/GatewayLinuxClient/libGatewayClient/include/gway_errors.h
 

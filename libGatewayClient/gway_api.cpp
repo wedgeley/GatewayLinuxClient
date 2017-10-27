@@ -6,7 +6,7 @@
 // Requests serial number from the Gateway
 // Writes the serial number into the supplied buffer
 extern "C"
-GatewayReturnCodes LookupGatewaySerialNumber(const char* url, char* buffer, size_t length)
+GatewayReturnCodes LookupGatewaySerialNumber(const char* url, char* buffer, size_t bufferLength)
 {
     GatewayReturnCodes status = GWAY_SUCCESS;
     GatewayClient client(url);
@@ -14,9 +14,10 @@ GatewayReturnCodes LookupGatewaySerialNumber(const char* url, char* buffer, size
     std::string serialNumber;
     status = client.LookupGatewaySerialNumber(serialNumber);
 
-    if (IsSuccess(status) && serialNumber.length() >= (length - 1))
+    if (IsSuccess(status) && serialNumber.length() > (bufferLength - 1))
     {
         // Insufficient room for the serial number
+        fprintf(stderr, "Error: Buffer of size %d characters too small for serial number of length %d\n", bufferLength, serialNumber.length());
         status = GWAY_BUFFER_TOO_SMALL;
     }
 

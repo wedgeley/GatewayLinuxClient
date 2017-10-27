@@ -23,7 +23,10 @@ GatewayReturnCodes Encryptor::Decrypt(const char* encrypted, size_t encryptedSiz
 
     oRijndael.Decrypt(encryptedStr.c_str(), pDecrypted, decryptedSize, CRijndael::CBC);
 
+    // Copy into the supplied string
     decryptedStr = pDecrypted;
+
+    memset(pDecrypted, 0, decryptedSize + 1);
     delete pDecrypted;
 
     return status;

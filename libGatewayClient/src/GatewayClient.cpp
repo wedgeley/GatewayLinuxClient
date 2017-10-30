@@ -1,6 +1,7 @@
 #include "GatewayClient.h"
 #include "JsonConverter.h"
 
+
 GatewayClient::GatewayClient(const char* url)
 {
     _url = url;
@@ -31,12 +32,20 @@ GatewayReturnCodes GatewayClient::LookupGatewaySerialNumber(std::string& serialN
 //
 //  Fetches all keys for the controller with the specified serial number
 //
-GatewayReturnCodes GatewayClient::ListAllKeys(const char* controllerSerialNumber, std::vector<std::string>& keycodes)
+GatewayReturnCodes GatewayClient::FetchPageOfKeys(const char* controllerSerialNumber, const char* lastKeycodeOnPreviousPage, int pageSize, std::vector<std::string>& keycodes)
 {
     GatewayReturnCodes status = GWAY_SUCCESS;
 
+    char pageSizeStr[16];
+    sprintf(pageSizeStr, "%d", pageSize);
+
+    std::map<const char*, const char*, cmp_str> parameters;
+    parameters["ControllerSerialNumber"] = controllerSerialNumber;
+    parameters["LastKeycodeOnPreviousPage"] = lastKeycodeOnPreviousPage;
+    parameters["PageSize"] = pageSizeStr;
+
     Json::Value jsonRoot;
-    status = PerformLookup(TIMEOUT_DATA_SECS, "Key", "ListAll", "ControllerSerialNumber", controllerSerialNumber, jsonRoot);
+    status = PerformLookup(TIMEOUT_DATA_SECS, "Key", "Page", parameters, jsonRoot);
     if (status == GWAY_SUCCESS)
     {
         if (jsonRoot.isArray())
@@ -53,14 +62,32 @@ GatewayReturnCodes GatewayClient::ListAllKeys(const char* controllerSerialNumber
 
 //
 //  Performs a lookup and returns the resulting JSON value
-//  This overload takes a single parameter
+//  This overload takes a map of parameter
 //
-GatewayReturnCodes GatewayClient::PerformLookup(long timeoutSecs, const char* controller, const char* action, const char* paramKey, const char* paramValue, Json::Value& jsonValue)
+GatewayReturnCodes GatewayClient::PerformLookup(
+    long timeoutSecs, const char* controller, const char* action, std::map<const char*, const char*, cmp_str> parameters, Json::Value& jsonValue)
 {
+    // Use std::string to build up the full url
+    std::string fullUrl = _url;
+    fullUrl += "/api/";
+    fullUrl += controller;
+    fullUrl += "/";
+    fullUrl += action;
+    fullUrl += "?";
+
+    // Parameters
+    std::map<const char*, const char*, cmp_str>::iterator it;
+    for ( it = parameters.begin(); it != parameters.end(); it++ )
+    {
+        fullUrl += it->first;
+        fullUrl += "=";
+        fullUrl += it->second;
+        fullUrl += "&";
+    }
+    fullUrl = fullUrl.substr(0, fullUrl.length() - 1);      // Remove trailing "&"
+
     // Specify URL to get
-    char fullUrl[180];
-    snprintf(fullUrl, 180, "%s/api/%s/%s?%s=%s", _url, controller, action, paramKey, paramValue);
-    return PerformLookup(timeoutSecs, fullUrl, jsonValue);
+    return PerformLookup(timeoutSecs, fullUrl.c_str(), jsonValue);
 }
 
 //

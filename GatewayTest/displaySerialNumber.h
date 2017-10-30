@@ -1,0 +1,6 @@
+#ifndef FETCHSERIALNUMBER_H_INCLUDED
+#define FETCHSERIALNUMBER_H_INCLUDED
+
+bool DisplaySerialNumber(const char* url);
+
+#endif // FETCHSERIALNUMBER_H_INCLUDED

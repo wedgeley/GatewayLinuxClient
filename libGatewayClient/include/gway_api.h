@@ -11,6 +11,13 @@ GatewayReturnCodes LookupGatewaySerialNumber(const char* url, char* buffer, size
 #ifdef __cplusplus
 extern "C"
 #endif // __cplusplus
-GatewayReturnCodes ListAllKeys(const char* url, const char* controllerSerialNumber, char* buffer[], size_t keycodeSize, uint numberOfKeycodes, int* returnedKeyCount);
+GatewayReturnCodes FetchPageOfKeys(
+    const char* url,
+    const char* controllerSerialNumber,
+    const char* lastKeycodeOnPreviousPage,
+    char* buffer[],
+    size_t keycodeSize,
+    uint pageSize,
+    int* returnedKeyCount);
 
 #endif // EXTERNALAPI_H_INCLUDED

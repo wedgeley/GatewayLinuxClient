@@ -31,20 +31,21 @@ GatewayReturnCodes LookupGatewaySerialNumber(const char* url, char* buffer, size
 
 // Requests all keys for the controller with the specified serial number
 extern "C"
-GatewayReturnCodes ListAllKeys(const char* url, const char* controllerSerialNumber, char* buffer[], size_t keyCodeSize, uint numberOfKeycodes, int* returnedKeyCount)
+GatewayReturnCodes FetchPageOfKeys(
+    const char* url,
+    const char* controllerSerialNumber,
+    const char* lastKeycodeOnPreviousPage,
+    char* buffer[],
+    size_t keyCodeSize,
+    uint pageSize,
+    int* returnedKeyCount)
 {
     GatewayReturnCodes status = GWAY_SUCCESS;
     *returnedKeyCount = 0;
     GatewayClient client(url);
 
     std::vector<std::string> keycodes;
-    status = client.ListAllKeys(controllerSerialNumber, keycodes);
-
-    if (IsSuccess(status) && keycodes.size() > numberOfKeycodes)
-    {
-        // Insufficient room for this many keys
-        status = GWAY_ARRAY_TOO_SMALL;
-    }
+    status = client.FetchPageOfKeys(controllerSerialNumber, lastKeycodeOnPreviousPage, pageSize, keycodes);
 
     if (IsSuccess(status))
     {

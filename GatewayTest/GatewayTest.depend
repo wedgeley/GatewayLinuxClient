@@ -1,13 +1,50 @@
 # depslib dependency file v1.0
-1509367447 source:/home/phil/Documents/repos/GatewayLinuxClient/GatewayTest/main.c
+1509538893 source:/home/phil/Documents/repos/GatewayLinuxClient/GatewayTest/main.c
+	<stdio.h>
+	<stdlib.h>
+	<stdbool.h>
+	<string.h>
+	"../libGatewayClient/include/gway_api.h"
+	"displaySerialNumber.h"
+	"displayAllKeycodes.h"
+	"displayKeyUpdates.h"
+
+1509543732 /home/phil/Documents/repos/GatewayLinuxClient/libGatewayClient/include/gway_api.h
+	"gway_errors.h"
+
+1509041099 /home/phil/Documents/repos/GatewayLinuxClient/libGatewayClient/include/gway_errors.h
+
+1509538534 source:/home/phil/Documents/repos/GatewayLinuxClient/GatewayTest/constants.c
+	<stdlib.h>
+
+1509544474 source:/home/phil/Documents/repos/GatewayLinuxClient/GatewayTest/displayAllKeycodes.c
+	<stdio.h>
+	<stdlib.h>
+	<stdbool.h>
+	<string.h>
+	"../libGatewayClient/include/gway_api.h"
+	"constants.h"
+
+1509538457 /home/phil/Documents/repos/GatewayLinuxClient/GatewayTest/constants.h
+
+1509538861 source:/home/phil/Documents/repos/GatewayLinuxClient/GatewayTest/displayKeyUpdates.c
+	<stdio.h>
+	<stdlib.h>
+	<stdbool.h>
+	<string.h>
+	"../libGatewayClient/include/gway_api.h"
+	"constants.h"
+
+1509372488 source:/home/phil/Documents/repos/GatewayLinuxClient/GatewayTest/displaySerialNumber.c
 	<stdio.h>
 	<stdlib.h>
 	<stdbool.h>
 	<string.h>
 	"../libGatewayClient/include/gway_api.h"
 
-1509097712 /home/phil/Documents/repos/GatewayLinuxClient/libGatewayClient/include/gway_api.h
-	"gway_errors.h"
+1509372304 /home/phil/Documents/repos/GatewayLinuxClient/GatewayTest/displaySerialNumber.h
 
-1509041099 /home/phil/Documents/repos/GatewayLinuxClient/libGatewayClient/include/gway_errors.h
+1509372281 /home/phil/Documents/repos/GatewayLinuxClient/GatewayTest/displayAllKeycodes.h
+
+1509538017 /home/phil/Documents/repos/GatewayLinuxClient/GatewayTest/displayKeyUpdates.h
 

@@ -3,6 +3,14 @@
 
 #include "gway_errors.h"
 
+// Key update record
+struct KeyUpdate
+{
+    char* KeyCode;
+    bool Active;
+    unsigned long long UtcTicks;
+};
+
 
 #ifdef __cplusplus
 extern "C"
@@ -33,7 +41,7 @@ GatewayReturnCodes FetchKeyUpdates(
     const char* url,
     const char* controllerSerialNumber,
     unsigned long long timeOfLastUpdate,
-    char* buffer[],
+    struct KeyUpdate* buffer[],
     size_t keyCodeSize,
     uint pageSize,
     int* returnedKeyCount);

@@ -15,7 +15,7 @@ bool DisplayAllKeys(const char* url, const char* entrancePanel)
     fprintf(stdout, "------------------------\n");
     fprintf(stdout, "Fetching all keys for %s...\n", entrancePanel);
 
-    // Allocate a buffer for a page of key codes
+    // Allocate a buffer for a page of key codes from stack memory
     char keys[KEYCODE_PAGE_SIZE][KEYCODE_LENGTH];
     char* buffer[KEYCODE_PAGE_SIZE];
     int i;
@@ -32,7 +32,7 @@ bool DisplayAllKeys(const char* url, const char* entrancePanel)
 
         if (IsSuccess(status))
         {
-            fprintf(stdout, "Page %d.  %d keys returned\n", pageNumber, keyCount);
+            fprintf(stdout, "Page %d.  %d key(s) returned\n", pageNumber, keyCount);
             for (i = 0 ; i < keyCount ; i++)
             {
                 fprintf(stdout, "\t%s\n", buffer[i]);

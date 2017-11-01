@@ -68,7 +68,7 @@ GatewayReturnCodes GatewayClient::FetchPageOfKeys(const char* controllerSerialNu
 //  Fetches key updates for the controller with the specified serial number
 //  Provide the time of the last update received in timeOfLastUpdate.  This is UTC ticks
 //
-GatewayReturnCodes GatewayClient::FetchKeyUpdates(const char* controllerSerialNumber, unsigned long long timeOfLastUpdate, int pageSize, std::vector<std::string>& keycodes)
+GatewayReturnCodes GatewayClient::FetchKeyUpdates(const char* controllerSerialNumber, unsigned long long timeOfLastUpdate, int pageSize, std::vector<KeyUpdateItem>& updates)
 {
     GatewayReturnCodes status = GWAY_SUCCESS;
 
@@ -94,7 +94,16 @@ GatewayReturnCodes GatewayClient::FetchKeyUpdates(const char* controllerSerialNu
         {
             for (uint i=0 ; i < jsonRoot.size(); i++)
             {
-                keycodes.push_back(jsonRoot[i].get("Keycode", "").asString());
+                KeyUpdateItem update;
+                update.KeyCode = jsonRoot[i].get("Keycode", "").asString();
+
+                // Convert 'active' from dotNet boolean
+                std::string activeStr = jsonRoot[i].get("Active", "").asString();
+                update.Active = false;
+                if (activeStr.compare("true") == 0) update.Active = true;
+
+                update.UtcTicks = jsonRoot[i].get("DateTimeUtcTicks", "").asUInt64();
+                updates.push_back(update);
             }
         }
     }

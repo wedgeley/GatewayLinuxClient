@@ -6,6 +6,7 @@
 #include "MessageBuffer.h"
 #include "gway_errors.h"
 #include "Encryptor.h"
+#include "Packets.h"
 
 #define TIMEOUT_CONNECT_SECS    10         // Timeout for initial connection
 #define TIMEOUT_DATA_SECS       10 * 60    // Timeout for data lookup
@@ -31,7 +32,7 @@ class GatewayClient
 
         GatewayReturnCodes LookupGatewaySerialNumber(std::string& serialNumber);
         GatewayReturnCodes FetchPageOfKeys(const char* controllerSerialNumber, const char* lastKeycodeOnPreviousPage, int pageSize, std::vector<std::string>& keycodes);
-        GatewayReturnCodes FetchKeyUpdates(const char* controllerSerialNumber, unsigned long long timeOfLastUpdate, int pageSize, std::vector<std::string>& keycodes);
+        GatewayReturnCodes FetchKeyUpdates(const char* controllerSerialNumber, unsigned long long timeOfLastUpdate, int pageSize, std::vector<KeyUpdateItem>& updates);
 
     protected:
 

@@ -36,19 +36,24 @@
 				</Linker>
 			</Target>
 		</Build>
-		<Unit filename="GatewayClient.cpp" />
-		<Unit filename="JsonBuffer.cpp" />
+		<Unit filename="aes/Rijndael.cpp" />
+		<Unit filename="aes/Rijndael.h" />
+		<Unit filename="base64/base64.h" />
 		<Unit filename="gway_api.cpp" />
 		<Unit filename="gway_errors.cpp" />
+		<Unit filename="include/Encryptor.h" />
 		<Unit filename="include/GatewayClient.h" />
-		<Unit filename="include/JsonBuffer.h" />
+		<Unit filename="include/JsonConverter.h" />
+		<Unit filename="include/MessageBuffer.h" />
 		<Unit filename="include/gway_api.h" />
-		<Unit filename="include/gway_errors.h">
-			<Option target="&lt;{~None~}&gt;" />
-		</Unit>
+		<Unit filename="include/gway_errors.h" />
 		<Unit filename="json/json-forwards.h" />
 		<Unit filename="json/json.h" />
-		<Unit filename="jsoncpp.cpp" />
+		<Unit filename="json/jsoncpp.cpp" />
+		<Unit filename="src/Encryptor.cpp" />
+		<Unit filename="src/GatewayClient.cpp" />
+		<Unit filename="src/JsonConverter.cpp" />
+		<Unit filename="src/MessageBuffer.cpp" />
 		<Extensions>
 			<code_completion />
 			<debugger />

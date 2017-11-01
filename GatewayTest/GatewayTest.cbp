@@ -37,7 +37,14 @@
 		<Compiler>
 			<Add option="-Wall" />
 		</Compiler>
-		<Unit filename="../libGatewayClient/include/libGateway_C_API.h" />
+		<Unit filename="displayAllKeycodes.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="displayAllKeycodes.h" />
+		<Unit filename="displaySerialNumber.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="displaySerialNumber.h" />
 		<Unit filename="main.c">
 			<Option compilerVar="CC" />
 		</Unit>

@@ -37,10 +37,22 @@
 		<Compiler>
 			<Add option="-Wall" />
 		</Compiler>
+		<Unit filename="constants.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="constants.h">
+			<Option target="&lt;{~None~}&gt;" />
+		</Unit>
 		<Unit filename="displayAllKeycodes.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="displayAllKeycodes.h" />
+		<Unit filename="displayKeyUpdates.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="displayKeyUpdates.h">
+			<Option target="&lt;{~None~}&gt;" />
+		</Unit>
 		<Unit filename="displaySerialNumber.c">
 			<Option compilerVar="CC" />
 		</Unit>

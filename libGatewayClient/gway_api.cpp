@@ -29,6 +29,7 @@ GatewayReturnCodes LookupGatewaySerialNumber(const char* url, char* buffer, size
     return status;
 }
 
+
 // Requests all keys for the controller with the specified serial number
 extern "C"
 GatewayReturnCodes FetchPageOfKeys(
@@ -46,6 +47,45 @@ GatewayReturnCodes FetchPageOfKeys(
 
     std::vector<std::string> keycodes;
     status = client.FetchPageOfKeys(controllerSerialNumber, lastKeycodeOnPreviousPage, pageSize, keycodes);
+
+    if (IsSuccess(status))
+    {
+        *returnedKeyCount = keycodes.size();
+        for (uint i=0 ; i < keycodes.size(); i++)
+        {
+            if (keycodes[i].length() > (keyCodeSize - 1))
+            {
+                status = GWAY_BUFFER_TOO_SMALL;
+            }
+            else
+            {
+                strcpy(buffer[i], keycodes[i].c_str());
+            }
+        }
+    }
+
+    return status;
+}
+
+
+//  Fetches key updates for the controller with the specified serial number
+//  Provide the time of the last update received in timeOfLastUpdate.  This is UTC ticks
+extern "C"
+GatewayReturnCodes FetchKeyUpdates(
+    const char* url,
+    const char* controllerSerialNumber,
+    unsigned long long timeOfLastUpdate,
+    char* buffer[],
+    size_t keyCodeSize,
+    uint pageSize,
+    int* returnedKeyCount)
+{
+    GatewayReturnCodes status = GWAY_SUCCESS;
+    *returnedKeyCount = 0;
+    GatewayClient client(url);
+
+    std::vector<std::string> keycodes;
+    status = client.FetchKeyUpdates(controllerSerialNumber, timeOfLastUpdate, pageSize, keycodes);
 
     if (IsSuccess(status))
     {

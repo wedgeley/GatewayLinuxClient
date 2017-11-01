@@ -36,13 +36,16 @@ GatewayReturnCodes GatewayClient::FetchPageOfKeys(const char* controllerSerialNu
 {
     GatewayReturnCodes status = GWAY_SUCCESS;
 
-    char pageSizeStr[16];
+    char pageSizeStr[6];
     sprintf(pageSizeStr, "%d", pageSize);
 
-    std::map<const char*, const char*, cmp_str> parameters;
-    parameters["ControllerSerialNumber"] = controllerSerialNumber;
-    parameters["LastKeycodeOnPreviousPage"] = lastKeycodeOnPreviousPage;
-    parameters["PageSize"] = pageSizeStr;
+    std::vector<ParameterValue> parameters;
+    ParameterValue parameter1("ControllerSerialNumber", controllerSerialNumber);
+    parameters.push_back(parameter1);
+    ParameterValue parameter2("LastKeycodeOnPreviousPage", lastKeycodeOnPreviousPage);
+    parameters.push_back(parameter2);
+    ParameterValue parameter3("PageSize", pageSizeStr);
+    parameters.push_back(parameter3);
 
     Json::Value jsonRoot;
     status = PerformLookup(TIMEOUT_DATA_SECS, "Key", "Page", parameters, jsonRoot);
@@ -60,12 +63,52 @@ GatewayReturnCodes GatewayClient::FetchPageOfKeys(const char* controllerSerialNu
     return status;
 }
 
+
+//
+//  Fetches key updates for the controller with the specified serial number
+//  Provide the time of the last update received in timeOfLastUpdate.  This is UTC ticks
+//
+GatewayReturnCodes GatewayClient::FetchKeyUpdates(const char* controllerSerialNumber, unsigned long long timeOfLastUpdate, int pageSize, std::vector<std::string>& keycodes)
+{
+    GatewayReturnCodes status = GWAY_SUCCESS;
+
+    char utcTicksStr[24];
+    sprintf(utcTicksStr, "%llu", timeOfLastUpdate);
+
+    char pageSizeStr[6];
+    sprintf(pageSizeStr, "%d", pageSize);
+
+    std::vector<ParameterValue> parameters;
+    ParameterValue parameter1("ControllerSerialNumber", controllerSerialNumber);
+    parameters.push_back(parameter1);
+    ParameterValue parameter2("UtcTicks", utcTicksStr);
+    parameters.push_back(parameter2);
+    ParameterValue parameter3("PageSize", pageSizeStr);
+    parameters.push_back(parameter3);
+
+    Json::Value jsonRoot;
+    status = PerformLookup(TIMEOUT_DATA_SECS, "Key", "Updates", parameters, jsonRoot);
+    if (status == GWAY_SUCCESS)
+    {
+        if (jsonRoot.isArray())
+        {
+            for (uint i=0 ; i < jsonRoot.size(); i++)
+            {
+                keycodes.push_back(jsonRoot[i].get("Keycode", "").asString());
+            }
+        }
+    }
+
+    return status;
+}
+
+
 //
 //  Performs a lookup and returns the resulting JSON value
 //  This overload takes a map of parameter
 //
 GatewayReturnCodes GatewayClient::PerformLookup(
-    long timeoutSecs, const char* controller, const char* action, std::map<const char*, const char*, cmp_str> parameters, Json::Value& jsonValue)
+    long timeoutSecs, const char* controller, const char* action, std::vector<ParameterValue> parameters, Json::Value& jsonValue)
 {
     // Use std::string to build up the full url
     std::string fullUrl = _url;
@@ -76,12 +119,12 @@ GatewayReturnCodes GatewayClient::PerformLookup(
     fullUrl += "?";
 
     // Parameters
-    std::map<const char*, const char*, cmp_str>::iterator it;
+    std::vector<ParameterValue>::iterator it;
     for ( it = parameters.begin(); it != parameters.end(); it++ )
     {
-        fullUrl += it->first;
+        fullUrl += it->Name;
         fullUrl += "=";
-        fullUrl += it->second;
+        fullUrl += it->Value;
         fullUrl += "&";
     }
     fullUrl = fullUrl.substr(0, fullUrl.length() - 1);      // Remove trailing "&"

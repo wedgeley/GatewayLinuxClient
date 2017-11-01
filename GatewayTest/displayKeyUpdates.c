@@ -7,13 +7,13 @@
 #include "constants.h"
 
 //
-//  Retrieves pages of key codes for the specified entrance panel and outputs the list to stdout
+//  Retrieves pages of key updates for the specified entrance panel and outputs the list to stdout
 //  Note that we never display more than MAX_PAGES_TO_DISPLAY pages
 //
-bool DisplayAllKeys(const char* url, const char* entrancePanel)
+bool DisplayKeyUpdates(const char* url, const char* entrancePanel)
 {
     fprintf(stdout, "------------------------\n");
-    fprintf(stdout, "Fetching all keys for %s...\n", entrancePanel);
+    fprintf(stdout, "Fetching key updates for %s...\n", entrancePanel);
 
     // Allocate a buffer for a page of key codes
     char keys[KEYCODE_PAGE_SIZE][KEYCODE_LENGTH];
@@ -24,33 +24,34 @@ bool DisplayAllKeys(const char* url, const char* entrancePanel)
     GatewayReturnCodes status = GWAY_SUCCESS;
     int keyCount = 0;
     int pageNumber = 1;
-    char* lastKeycodeOnPreviousPage = "";
+    unsigned long long lastUpdateTicksUtc = 0;
 
     do
     {
-        status = FetchPageOfKeys(url, entrancePanel, lastKeycodeOnPreviousPage, buffer, KEYCODE_LENGTH, KEYCODE_PAGE_SIZE, &keyCount);
+        status = FetchKeyUpdates(url, entrancePanel, lastUpdateTicksUtc, buffer, KEYCODE_LENGTH, KEYCODE_PAGE_SIZE, &keyCount);
 
         if (IsSuccess(status))
         {
-            fprintf(stdout, "Page %d.  %d keys returned\n", pageNumber, keyCount);
+            fprintf(stdout, "Page %d.  %d key updates returned\n", pageNumber, keyCount);
             for (i = 0 ; i < keyCount ; i++)
             {
                 fprintf(stdout, "\t%s\n", buffer[i]);
             }
             fprintf(stdout, "\n");
 
-            lastKeycodeOnPreviousPage = buffer[keyCount - 1];
+//            lastUpdateTicksUtc = buffer[keyCount - 1];
             pageNumber++;
         }
     }
     while (IsSuccess(status) &&                     // Lookup was successful
+           false && // DEBUG
            keyCount == KEYCODE_PAGE_SIZE &&         // We got a full page of keys
            pageNumber < MAX_PAGES_TO_DISPLAY);      // Limit the display. (Also protects against endless loop)
 
     if (!IsSuccess(status))
     {
         fprintf(stderr, "\n");
-        fprintf(stderr, "*** Failed to fetch keys ***\n");
+        fprintf(stderr, "*** Failed to fetch key updates ***\n");
         fprintf(stderr, "\tError code %d - %s\n", status, ErrorDescription(status));
         return false;
     }

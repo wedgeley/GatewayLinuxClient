@@ -6,6 +6,7 @@
 #include "../libGatewayClient/include/gway_api.h"
 #include "displaySerialNumber.h"
 #include "displayAllKeycodes.h"
+#include "displayKeyUpdates.h"
 
 const char* DEFAULT_URL = "http://192.168.2.2:8080";
 const char* DEFAULT_ENTRANCEPANEL = "ENTRANCE001";
@@ -32,6 +33,14 @@ int main()
         // All keys allocated to this controller
         ok = DisplayAllKeys(url, entrancePanel);
     }
+
+    if (ok)
+    {
+        // Key updates
+        ok = DisplayKeyUpdates(url, entrancePanel);
+    }
+
+    fprintf(stdout, "------------------------\n");
 
     return ok ? 0 : 1;
 }

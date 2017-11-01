@@ -3,6 +3,7 @@
 
 #include "gway_errors.h"
 
+
 #ifdef __cplusplus
 extern "C"
 #endif // __cplusplus
@@ -24,4 +25,19 @@ GatewayReturnCodes FetchPageOfKeys(
     uint pageSize,
     int* returnedKeyCount);
 
+
+#ifdef __cplusplus
+extern "C"
+#endif // __cplusplus
+GatewayReturnCodes FetchKeyUpdates(
+    const char* url,
+    const char* controllerSerialNumber,
+    unsigned long long timeOfLastUpdate,
+    char* buffer[],
+    size_t keyCodeSize,
+    uint pageSize,
+    int* returnedKeyCount);
+
+
 #endif // EXTERNALAPI_H_INCLUDED
+

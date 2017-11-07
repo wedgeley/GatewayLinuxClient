@@ -13,7 +13,8 @@ typedef enum
     GWAY_SERVER_UNAVAILABLE = 4,        // Failed to contact Gateway
     GWAY_OUT_OF_MEMORY = 5,             // Memory allocation failure
     GWAY_JSON_PARSE_ERROR = 6,          // Failed to parse returned JSON
-    GWAY_NO_DATA_RETURNED = 7           // No data returned from lookup
+    GWAY_NO_DATA_RETURNED = 7,          // No data returned from lookup
+    GWAY_LOOKUP_FAILED = 8              // Server returned error response
 }
 GatewayReturnCodes;
 

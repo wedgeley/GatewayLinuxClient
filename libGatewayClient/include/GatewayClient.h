@@ -40,6 +40,8 @@ class GatewayClient
         GatewayReturnCodes PerformLookup(long timeoutSecs, const char* controller, const char* action, std::vector<ParameterValue> parameters, Json::Value& jsonValue);
         GatewayReturnCodes PerformLookup(long timeoutSecs, const char* controller, const char* action, Json::Value& jsonRoot);
         GatewayReturnCodes PerformLookup(long timeoutSecs, const char* url, Json::Value& jsonRoot);
+        void ExtractError();
+
         CURL* _pCurlHandle;
         MessageBuffer _buffer;
         Encryptor _encryptor;

@@ -183,12 +183,28 @@ GatewayReturnCodes GatewayClient::PerformLookup(long timeoutSecs, const char* ur
     // Perform the lookup
     if (res == CURLE_OK) res = curl_easy_perform(_pCurlHandle);
 
-    // Check for errors
+    // Check for curl errors
     if (res != CURLE_OK)
     {
         fprintf(stderr, "Error: Curl error code %d:\n", res);
         fprintf(stderr, "       \"%s\"\n", errorMessage);
         status = GWAY_SERVER_UNAVAILABLE;
+    }
+
+    // Check the http status code
+    if (res == CURLE_OK)
+    {
+        long http_code = 0;
+        curl_easy_getinfo(_pCurlHandle, CURLINFO_RESPONSE_CODE, &http_code);
+        if (http_code != 200)
+        {
+            // Failed
+            fprintf(stderr, "Error: Lookup failed [%ld]\n", http_code);
+            status = GWAY_LOOKUP_FAILED;
+
+            // If this is an error from the Gateway, further error info will be in the response
+            ExtractError();
+        }
     }
 
     if (IsSuccess(status))
@@ -200,7 +216,7 @@ GatewayReturnCodes GatewayClient::PerformLookup(long timeoutSecs, const char* ur
     std::string messageBody;
     if (IsSuccess(status))
     {
-        // Decrypt the data
+        // Decrypt the response
         status = _encryptor.Decrypt(_buffer.BufferPtr, _buffer.BufferSize, messageBody);
     }
 
@@ -211,6 +227,35 @@ GatewayReturnCodes GatewayClient::PerformLookup(long timeoutSecs, const char* ur
     }
 
     return status;
+}
+
+//
+//  Attempt to extract error information out of an error response
+//
+void GatewayClient::ExtractError()
+{
+    // Decrypt the response
+    std::string messageBody;
+    GatewayReturnCodes status = _encryptor.Decrypt(_buffer.BufferPtr, _buffer.BufferSize, messageBody);
+
+    // Load the JSON returned
+    Json::Value jsonValue = NULL;
+    if (IsSuccess(status))
+    {
+        status = JsonConverter::ToJson(messageBody, jsonValue);
+    }
+
+    // See if there is an error message from the Gateway
+    std::string errorMessage;
+    if (IsSuccess(status))
+    {
+        errorMessage = jsonValue.get("ErrorMessage", "").asString();
+    }
+
+    if (errorMessage.length() > 0)
+    {
+        fprintf(stderr, "\t%s:\n", errorMessage.c_str());
+    }
 }
 
 GatewayClient::~GatewayClient()

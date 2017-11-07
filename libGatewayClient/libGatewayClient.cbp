@@ -45,6 +45,7 @@
 		<Unit filename="include/GatewayClient.h" />
 		<Unit filename="include/JsonConverter.h" />
 		<Unit filename="include/MessageBuffer.h" />
+		<Unit filename="include/Packets.h" />
 		<Unit filename="include/gway_api.h" />
 		<Unit filename="include/gway_errors.h" />
 		<Unit filename="json/json-forwards.h" />

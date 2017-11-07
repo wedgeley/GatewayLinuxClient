@@ -12,7 +12,6 @@
 //
 bool DisplayAllKeys(const char* url, const char* entrancePanel)
 {
-    fprintf(stdout, "------------------------\n");
     fprintf(stdout, "Fetching all keys for %s...\n", entrancePanel);
 
     // Allocate a buffer for a page of key codes from stack memory

@@ -59,7 +59,6 @@ GatewayReturnCodes UDPListener::Listen(int port, void (*functionPtr)())
         unsigned slen = sizeof(sockaddr);
         if (recvfrom(s, buf, sizeof(buf)-1, 0, (sockaddr *)&si_other, &slen) > 0)
         {
-            fprintf(stdout, "--- UDP Packet Received ---\n");
             (*functionPtr)();
         }
     }

@@ -7,13 +7,16 @@
 #include "../libGatewayClient/include/gway_api.h"
 #include "constants.h"
 
+// Keep track of which updates we last received
+unsigned long long lastUpdateTicksUtc = 0;
+
+
 //
 //  Retrieves pages of key updates for the specified entrance panel and outputs the list to stdout
 //  Note that we never display more than MAX_PAGES_TO_DISPLAY pages
 //
 bool DisplayKeyUpdates(const char* url, const char* entrancePanel)
 {
-    fprintf(stdout, "------------------------\n");
     fprintf(stdout, "Fetching key updates for %s...\n", entrancePanel);
 
     // Allocate memory for a page of key updates from the stack
@@ -29,7 +32,6 @@ bool DisplayKeyUpdates(const char* url, const char* entrancePanel)
     GatewayReturnCodes status = GWAY_SUCCESS;
     int keyCount = 0;
     int pageNumber = 1;
-    unsigned long long lastUpdateTicksUtc = 0;
 
     do
     {

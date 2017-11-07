@@ -17,6 +17,7 @@ void PromptForEntrancePanelSerialNumber(char* serialNumber, size_t bufferSize);
 void ListenForUpdates();
 void UpdateAvailable();
 
+// Gateway address and our serial number
 char url[80];
 char entrancePanel[32];
 
@@ -34,20 +35,21 @@ int main()
     if (ok)
     {
         // All keys allocated to this controller
+        fprintf(stdout, "------------------------\n");
         ok = DisplayAllKeys(url, entrancePanel);
     }
 
     if (ok)
     {
         // Key updates
+        fprintf(stdout, "------------------------\n");
         ok = DisplayKeyUpdates(url, entrancePanel);
     }
-
-    fprintf(stdout, "------------------------\n");
 
     if (ok)
     {
         // Listen for notifications that updates are available
+        fprintf(stdout, "------------------------\n");
         ListenForUpdates();
     }
 
@@ -108,7 +110,4 @@ void UpdateAvailable()
 {
     fprintf(stdout, "\nKey updates are available...\n");
     DisplayKeyUpdates(url, entrancePanel);
-
-    // Reinstate the prompt
-    fprintf(stdout, "\n\nListening for updates (Press ENTER to exit)... ");
 }

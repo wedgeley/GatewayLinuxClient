@@ -46,6 +46,7 @@
 		<Unit filename="include/JsonConverter.h" />
 		<Unit filename="include/MessageBuffer.h" />
 		<Unit filename="include/Packets.h" />
+		<Unit filename="include/UDPListener.h" />
 		<Unit filename="include/gway_api.h" />
 		<Unit filename="include/gway_errors.h" />
 		<Unit filename="json/json-forwards.h" />
@@ -55,6 +56,7 @@
 		<Unit filename="src/GatewayClient.cpp" />
 		<Unit filename="src/JsonConverter.cpp" />
 		<Unit filename="src/MessageBuffer.cpp" />
+		<Unit filename="src/UDPListener.cpp" />
 		<Extensions>
 			<code_completion />
 			<debugger />

@@ -14,7 +14,10 @@ typedef enum
     GWAY_OUT_OF_MEMORY = 5,             // Memory allocation failure
     GWAY_JSON_PARSE_ERROR = 6,          // Failed to parse returned JSON
     GWAY_NO_DATA_RETURNED = 7,          // No data returned from lookup
-    GWAY_LOOKUP_FAILED = 8              // Server returned error response
+    GWAY_LOOKUP_FAILED = 8,             // Server returned error response
+    GWAY_UDP_ERROR = 9,                 // Error setting up UDP socket
+    GWAY_PTHREAD_ERROR = 10,            // Error setting up pthreads
+    GWAY_ERROR_CODES_END                // Do not use
 }
 GatewayReturnCodes;
 

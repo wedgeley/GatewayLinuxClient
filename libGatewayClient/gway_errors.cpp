@@ -25,6 +25,8 @@ const char* ErrorDescription(GatewayReturnCodes code)
         case GWAY_JSON_PARSE_ERROR:     return "Failed to parse JSON returned from lookup";
         case GWAY_NO_DATA_RETURNED:     return "No data returned from lookup";
         case GWAY_LOOKUP_FAILED:        return "Lookup failed";
+        case GWAY_UDP_ERROR:            return "Error setting up UDP socket";
+        case GWAY_PTHREAD_ERROR:        return "Error with PTHREADs";
         default:                        return "Unknown error";
     }
 }

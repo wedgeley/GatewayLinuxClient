@@ -47,5 +47,18 @@ GatewayReturnCodes FetchKeyUpdates(
     int* returnedKeyCount);
 
 
+#ifdef __cplusplus
+extern "C"
+#endif // __cplusplus
+GatewayReturnCodes RegisterForUpdateNotification(
+    void (*functionPtr)());
+
+
+#ifdef __cplusplus
+extern "C"
+#endif // __cplusplus
+GatewayReturnCodes CancelUpdateNotification();
+
+
 #endif // EXTERNALAPI_H_INCLUDED
 

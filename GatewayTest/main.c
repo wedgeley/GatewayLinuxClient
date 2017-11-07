@@ -14,16 +14,19 @@ const char* DEFAULT_ENTRANCEPANEL = "ENTRANCE001";
 // Function prototypes
 void PromptForUrl(char* url, size_t bufferSize);
 void PromptForEntrancePanelSerialNumber(char* serialNumber, size_t bufferSize);
+void ListenForUpdates();
+void UpdateAvailable();
+
+char url[80];
+char entrancePanel[32];
 
 int main()
 {
     // Prompt for the URL of the gateway
-    char url[80];
-    PromptForUrl(url, 80);
+    PromptForUrl(url, sizeof(url));
 
     // Prompt for the serial number of the entrance panel that we're emulating
-    char entrancePanel[32];
-    PromptForEntrancePanelSerialNumber(entrancePanel, 32);
+    PromptForEntrancePanelSerialNumber(entrancePanel, sizeof(entrancePanel));
 
     // Fetch the gateway's serial number
     bool ok = DisplaySerialNumber(url);
@@ -41,6 +44,12 @@ int main()
     }
 
     fprintf(stdout, "------------------------\n");
+
+    if (ok)
+    {
+        // Listen for notifications that updates are available
+        ListenForUpdates();
+    }
 
     return ok ? 0 : 1;
 }
@@ -71,4 +80,35 @@ void PromptForEntrancePanelSerialNumber(char* serialNumber, size_t bufferSize)
     if (strlen(serialNumber) <= 1) strcpy(serialNumber, DEFAULT_ENTRANCEPANEL);
     serialNumber[strcspn(serialNumber, "\n")] = 0;  // Remove trailing '\n'
     fprintf(stdout, "\n");
+}
+
+
+//
+//  Listens for key update notifications until the user presses ENTER
+//
+void ListenForUpdates()
+{
+    // Listen for notifications that updates are available
+    RegisterForUpdateNotification(&UpdateAvailable);
+
+    // Keep running until the user presses return
+    fprintf(stdout, "\n\nListening for updates (Press ENTER to exit)... ");
+    getc(stdin);
+
+    // Exiting.  Stop listening for updates
+    fprintf(stdout, "Exiting.  Waiting for listener to stop...\n");
+    CancelUpdateNotification();
+}
+
+
+//
+//  Function to be called when we are notified that an update is received
+//
+void UpdateAvailable()
+{
+    fprintf(stdout, "\nKey updates are available...\n");
+    DisplayKeyUpdates(url, entrancePanel);
+
+    // Reinstate the prompt
+    fprintf(stdout, "\n\nListening for updates (Press ENTER to exit)... ");
 }

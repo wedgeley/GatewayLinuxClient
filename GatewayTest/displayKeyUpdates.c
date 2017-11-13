@@ -51,9 +51,13 @@ bool DisplayKeyUpdates(const char* url, const char* entrancePanel)
                 t=(time_t)((buffer[i]->UtcTicks-UnixEpoch)/10000000);
                 tm=gmtime(&t);
 
-                if (buffer[i]->Active)
+                if (buffer[i]->KeyCode[0] == '*')
                 {
-                    fprintf(stdout, "\t+ Added %s on %s", buffer[i]->KeyCode, asctime(tm));     // asctime returns string ending with newline
+                    fprintf(stdout, "\t*** Key re-fetch requested on %s", asctime(tm));           // asctime returns string ending with newline
+                }
+                else if (buffer[i]->Active)
+                {
+                    fprintf(stdout, "\t+ Added %s on %s", buffer[i]->KeyCode, asctime(tm));       // asctime returns string ending with newline
                 }
                 else
                 {

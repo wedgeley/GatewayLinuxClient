@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1510053645 source:/home/phil/Documents/repos/GatewayLinuxClient/GatewayTest/main.c
+1510057757 source:/home/phil/Documents/repos/GatewayLinuxClient/GatewayTest/main.c
 	<stdio.h>
 	<stdlib.h>
 	<stdbool.h>
@@ -9,15 +9,15 @@
 	"displayAllKeycodes.h"
 	"displayKeyUpdates.h"
 
-1509543732 /home/phil/Documents/repos/GatewayLinuxClient/libGatewayClient/include/gway_api.h
+1510056829 /home/phil/Documents/repos/GatewayLinuxClient/libGatewayClient/include/gway_api.h
 	"gway_errors.h"
 
-1510048890 /home/phil/Documents/repos/GatewayLinuxClient/libGatewayClient/include/gway_errors.h
+1510055610 /home/phil/Documents/repos/GatewayLinuxClient/libGatewayClient/include/gway_errors.h
 
 1509538534 source:/home/phil/Documents/repos/GatewayLinuxClient/GatewayTest/constants.c
 	<stdlib.h>
 
-1509544474 source:/home/phil/Documents/repos/GatewayLinuxClient/GatewayTest/displayAllKeycodes.c
+1510057556 source:/home/phil/Documents/repos/GatewayLinuxClient/GatewayTest/displayAllKeycodes.c
 	<stdio.h>
 	<stdlib.h>
 	<stdbool.h>
@@ -27,7 +27,7 @@
 
 1509538457 /home/phil/Documents/repos/GatewayLinuxClient/GatewayTest/constants.h
 
-1509546065 source:/home/phil/Documents/repos/GatewayLinuxClient/GatewayTest/displayKeyUpdates.c
+1510581339 source:/home/phil/Documents/repos/GatewayLinuxClient/GatewayTest/displayKeyUpdates.c
 	<stdio.h>
 	<stdlib.h>
 	<stdbool.h>

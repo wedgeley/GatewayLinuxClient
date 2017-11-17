@@ -23,11 +23,12 @@ bool DisplayAllKeys(const char* url, const char* entrancePanel)
     GatewayReturnCodes status = GWAY_SUCCESS;
     int keyCount = 0;
     int pageNumber = 1;
-    char* lastKeycodeOnPreviousPage = "";
+    char inPageMarker[40] = "";
+    char outPageMarker[40] = "";
 
     do
     {
-        status = FetchPageOfKeys(url, entrancePanel, lastKeycodeOnPreviousPage, buffer, KEYCODE_LENGTH, KEYCODE_PAGE_SIZE, &keyCount);
+        status = FetchPageOfKeys(url, entrancePanel, inPageMarker, outPageMarker, buffer, KEYCODE_LENGTH, KEYCODE_PAGE_SIZE, &keyCount);
 
         if (IsSuccess(status))
         {
@@ -38,7 +39,7 @@ bool DisplayAllKeys(const char* url, const char* entrancePanel)
             }
             fprintf(stdout, "\n");
 
-            lastKeycodeOnPreviousPage = buffer[keyCount - 1];
+            strcpy(inPageMarker, outPageMarker);
             pageNumber++;
         }
     }

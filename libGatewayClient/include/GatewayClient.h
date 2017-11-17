@@ -31,7 +31,7 @@ class GatewayClient
         virtual ~GatewayClient();
 
         GatewayReturnCodes LookupGatewaySerialNumber(std::string& serialNumber);
-        GatewayReturnCodes FetchPageOfKeys(const char* controllerSerialNumber, const char* lastKeycodeOnPreviousPage, int pageSize, std::vector<std::string>& keycodes);
+        GatewayReturnCodes FetchPageOfKeys(const char* controllerSerialNumber, const char* inPageMarker, int pageSize, std::vector<std::string>& keycodes, std::string& outPageMarker);
         GatewayReturnCodes FetchKeyUpdates(const char* controllerSerialNumber, unsigned long long timeOfLastUpdate, int pageSize, std::vector<KeyUpdateItem>& updates);
 
     protected:

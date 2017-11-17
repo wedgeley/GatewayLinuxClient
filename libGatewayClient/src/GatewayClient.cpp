@@ -33,7 +33,12 @@ GatewayReturnCodes GatewayClient::LookupGatewaySerialNumber(std::string& serialN
 //
 //  Fetches all keys for the controller with the specified serial number
 //
-GatewayReturnCodes GatewayClient::FetchPageOfKeys(const char* controllerSerialNumber, const char* lastKeycodeOnPreviousPage, int pageSize, std::vector<std::string>& keycodes)
+GatewayReturnCodes GatewayClient::FetchPageOfKeys(
+    const char* controllerSerialNumber,
+    const char* inPageMarker,
+    int pageSize,
+    std::vector<std::string>& keycodes,
+    std::string& outPageMarker)
 {
     GatewayReturnCodes status = GWAY_SUCCESS;
 
@@ -43,7 +48,7 @@ GatewayReturnCodes GatewayClient::FetchPageOfKeys(const char* controllerSerialNu
     std::vector<ParameterValue> parameters;
     ParameterValue parameter1("ControllerSerialNumber", controllerSerialNumber);
     parameters.push_back(parameter1);
-    ParameterValue parameter2("LastKeycodeOnPreviousPage", lastKeycodeOnPreviousPage);
+    ParameterValue parameter2("inPageMarker", inPageMarker);
     parameters.push_back(parameter2);
     ParameterValue parameter3("PageSize", pageSizeStr);
     parameters.push_back(parameter3);
@@ -57,6 +62,7 @@ GatewayReturnCodes GatewayClient::FetchPageOfKeys(const char* controllerSerialNu
             for (uint i=0 ; i < jsonRoot.size(); i++)
             {
                 keycodes.push_back(jsonRoot[i].get("Keycode", "").asString());
+                if (i == jsonRoot.size() - 1) outPageMarker = jsonRoot[i].get("KeyholderId", "").asString();
             }
         }
     }

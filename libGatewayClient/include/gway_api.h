@@ -27,7 +27,8 @@ extern "C"
 GatewayReturnCodes FetchPageOfKeys(
     const char* url,
     const char* controllerSerialNumber,
-    const char* lastKeycodeOnPreviousPage,
+    const char* inPageMarker,
+    char* outPageMarker,
     char* buffer[],
     size_t keycodeSize,
     uint pageSize,

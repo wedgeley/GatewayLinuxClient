@@ -51,7 +51,8 @@ extern "C"
 GatewayReturnCodes FetchPageOfKeys(
     const char* url,
     const char* controllerSerialNumber,
-    const char* lastKeycodeOnPreviousPage,
+    const char* inPageMarker,
+    char* outPageMarker,
     char* buffer[],
     size_t keyCodeSize,
     uint pageSize,
@@ -62,10 +63,12 @@ GatewayReturnCodes FetchPageOfKeys(
     GatewayClient client(url);
 
     std::vector<std::string> keycodes;
-    status = client.FetchPageOfKeys(controllerSerialNumber, lastKeycodeOnPreviousPage, pageSize, keycodes);
+    std::string outPageMarkerStr;
+    status = client.FetchPageOfKeys(controllerSerialNumber, inPageMarker, pageSize, keycodes, outPageMarkerStr);
 
     if (IsSuccess(status))
     {
+        // Copy key codes into the supplied buffer
         *returnedKeyCount = keycodes.size();
         for (uint i=0 ; i < keycodes.size(); i++)
         {
@@ -78,6 +81,12 @@ GatewayReturnCodes FetchPageOfKeys(
                 strcpy(buffer[i], keycodes[i].c_str());
             }
         }
+    }
+
+    if (IsSuccess(status) && *returnedKeyCount > 0)
+    {
+        // Return the page marker for the next page
+        strcpy(outPageMarker, outPageMarkerStr.substr(0, 39).c_str());
     }
 
     return status;

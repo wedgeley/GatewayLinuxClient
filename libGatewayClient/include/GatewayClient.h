@@ -31,6 +31,7 @@ class GatewayClient
         virtual ~GatewayClient();
 
         GatewayReturnCodes LookupGatewaySerialNumber(std::string& serialNumber);
+        GatewayReturnCodes LookupGatewayLastSyncTime(unsigned long long* utcTicks);
         GatewayReturnCodes FetchPageOfKeys(const char* controllerSerialNumber, const char* inPageMarker, int pageSize, std::vector<std::string>& keycodes, std::string& outPageMarker);
         GatewayReturnCodes FetchKeyUpdates(const char* controllerSerialNumber, unsigned long long timeOfLastUpdate, int pageSize, std::vector<KeyUpdateItem>& updates);
 

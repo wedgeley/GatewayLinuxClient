@@ -24,6 +24,14 @@ GatewayReturnCodes LookupGatewaySerialNumber(
 #ifdef __cplusplus
 extern "C"
 #endif // __cplusplus
+GatewayReturnCodes LookupGatewayLastCloudSyncTime(
+    const char* url,
+    unsigned long long* utcTicks);
+
+
+#ifdef __cplusplus
+extern "C"
+#endif // __cplusplus
 GatewayReturnCodes FetchPageOfKeys(
     const char* url,
     const char* controllerSerialNumber,

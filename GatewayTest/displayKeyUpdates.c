@@ -15,9 +15,15 @@ unsigned long long lastUpdateTicksUtc = 0;
 //  Retrieves pages of key updates for the specified entrance panel and outputs the list to stdout
 //  Note that we never display more than MAX_PAGES_TO_DISPLAY pages
 //
-bool DisplayKeyUpdates(const char* url, const char* entrancePanel)
+bool DisplayKeyUpdates(const char* url, const char* entrancePanel, unsigned long long utcCloudSyncTicks)
 {
     fprintf(stdout, "Fetching key updates for %s...\n", entrancePanel);
+
+    if (lastUpdateTicksUtc == 0 && utcCloudSyncTicks > 0)
+    {
+        // First time in.  Use the supplied sync time so we are not fetching all updates from when time began
+        lastUpdateTicksUtc = utcCloudSyncTicks;
+    }
 
     // Allocate memory for a page of key updates from the stack
     int i;
@@ -39,17 +45,14 @@ bool DisplayKeyUpdates(const char* url, const char* entrancePanel)
 
         if (IsSuccess(status))
         {
-            // Thursday, January 01, 1970 12:00:00 AM
-            unsigned long long UnixEpoch = 0x089f7ff5f7b58000LL;
-
             fprintf(stdout, "Page %d.  %d key update(s) returned\n", pageNumber, keyCount);
             for (i = 0 ; i < keyCount ; i++)
             {
                 time_t t;
                 struct tm *tm;
 
-                t=(time_t)((buffer[i]->UtcTicks-UnixEpoch)/10000000);
-                tm=gmtime(&t);
+                t = (time_t)((buffer[i]->UtcTicks - UNIXEPOCH) / 10000000);
+                tm = gmtime(&t);
 
                 if (buffer[i]->KeyCode[0] == '*')
                 {

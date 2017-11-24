@@ -45,6 +45,17 @@ GatewayReturnCodes LookupGatewaySerialNumber(const char* url, char* buffer, size
 
 
 //
+// Requests the time that the Gateway last sync-ed up to the cloud
+//
+extern "C"
+GatewayReturnCodes LookupGatewayLastCloudSyncTime(const char* url, unsigned long long* utcTicks)
+{
+    GatewayClient client(url);
+    return client.LookupGatewayLastSyncTime(utcTicks);
+}
+
+
+//
 // Requests all keys for the controller with the specified serial number
 //
 extern "C"

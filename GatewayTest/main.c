@@ -32,18 +32,21 @@ int main()
     // Fetch the gateway's serial number
     bool ok = DisplaySerialNumber(url);
 
+    // This is the last time the Gateway sync-ed with the cloud
+    unsigned long long utcCloudSyncTicks;
+
     if (ok)
     {
         // All keys allocated to this controller
         fprintf(stdout, "------------------------\n");
-        ok = DisplayAllKeys(url, entrancePanel);
+        ok = DisplayAllKeys(url, entrancePanel, &utcCloudSyncTicks);
     }
 
     if (ok)
     {
         // Key updates
         fprintf(stdout, "------------------------\n");
-        ok = DisplayKeyUpdates(url, entrancePanel);
+        ok = DisplayKeyUpdates(url, entrancePanel, utcCloudSyncTicks);
     }
 
     if (ok)
@@ -109,5 +112,5 @@ void ListenForUpdates()
 void UpdateAvailable()
 {
     fprintf(stdout, "\nKey updates are available...\n");
-    DisplayKeyUpdates(url, entrancePanel);
+    DisplayKeyUpdates(url, entrancePanel, 0);
 }

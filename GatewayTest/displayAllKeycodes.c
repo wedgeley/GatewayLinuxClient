@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include <string.h>
+#include <time.h>
 
 #include "../libGatewayClient/include/gway_api.h"
 #include "constants.h"
@@ -10,9 +11,27 @@
 //  Retrieves pages of key codes for the specified entrance panel and outputs the list to stdout
 //  Note that we never display more than MAX_PAGES_TO_DISPLAY pages
 //
-bool DisplayAllKeys(const char* url, const char* entrancePanel)
+//  utcCloudSyncTicks is returned to the caller.  It is the time the Gateway last sync-ed to the cloud
+//
+bool DisplayAllKeys(const char* url, const char* entrancePanel, unsigned long long* utcCloudSyncTicks)
 {
+    GatewayReturnCodes status = GWAY_SUCCESS;
+
     fprintf(stdout, "Fetching all keys for %s...\n", entrancePanel);
+
+    // Display time of last cloud sync
+    status = LookupGatewayLastCloudSyncTime(url, utcCloudSyncTicks);
+
+    if (IsSuccess(status))
+    {
+        time_t t;
+        struct tm *tm;
+
+        t = (time_t)((*utcCloudSyncTicks - UNIXEPOCH) / 10000000);
+        tm = gmtime(&t);
+
+        fprintf(stdout, "The Gateway last sync-ed to the cloud at %s\n", asctime(tm));           // asctime returns string ending with newline
+    }
 
     // Allocate a buffer for a page of key codes from stack memory
     char keys[KEYCODE_PAGE_SIZE][KEYCODE_LENGTH];
@@ -20,7 +39,6 @@ bool DisplayAllKeys(const char* url, const char* entrancePanel)
     int i;
     for (i = 0 ; i < KEYCODE_PAGE_SIZE ; i++) buffer[i] = keys[i];
 
-    GatewayReturnCodes status = GWAY_SUCCESS;
     int keyCount = 0;
     int pageNumber = 1;
     char inPageMarker[40] = "";

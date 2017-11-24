@@ -31,6 +31,23 @@ GatewayReturnCodes GatewayClient::LookupGatewaySerialNumber(std::string& serialN
 }
 
 //
+//  Fetches time of last sync for the gateway
+//
+GatewayReturnCodes GatewayClient::LookupGatewayLastSyncTime(unsigned long long* utcTicks)
+{
+    GatewayReturnCodes status = GWAY_SUCCESS;
+
+    Json::Value jsonRoot;
+    status = PerformLookup(TIMEOUT_CONNECT_SECS, "Key", "TimeOfLastSync", jsonRoot);
+    if (status == GWAY_SUCCESS)
+    {
+        *utcTicks = jsonRoot.asUInt64();
+    }
+
+    return status;
+}
+
+//
 //  Fetches all keys for the controller with the specified serial number
 //
 GatewayReturnCodes GatewayClient::FetchPageOfKeys(

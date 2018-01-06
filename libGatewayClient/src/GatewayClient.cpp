@@ -54,7 +54,7 @@ GatewayReturnCodes GatewayClient::FetchPageOfKeys(
     const char* controllerSerialNumber,
     const char* inPageMarker,
     int pageSize,
-    std::vector<std::string>& keycodes,
+    std::vector<KeyEntryItem>& keyentries,
     std::string& outPageMarker)
 {
     GatewayReturnCodes status = GWAY_SUCCESS;
@@ -78,8 +78,17 @@ GatewayReturnCodes GatewayClient::FetchPageOfKeys(
         {
             for (uint i=0 ; i < jsonRoot.size(); i++)
             {
-                keycodes.push_back(jsonRoot[i].get("Keycode", "").asString());
-                if (i == jsonRoot.size() - 1) outPageMarker = jsonRoot[i].get("KeyholderId", "").asString();
+                KeyEntryItem entry;
+                entry.KeyCode = jsonRoot[i].get("Keycode", "").asString();
+
+                // Convert 'tagged' from dotNet boolean
+                std::string activeStr = jsonRoot[i].get("Tagged", "").asString();
+                entry.Tagged = false;
+                if (activeStr.compare("true") == 0) entry.Tagged = true;
+
+                keyentries.push_back(entry);
+
+                if (i == jsonRoot.size() - 1) outPageMarker = jsonRoot[i].get("Id", "").asString();
             }
         }
     }
@@ -125,6 +134,11 @@ GatewayReturnCodes GatewayClient::FetchKeyUpdates(const char* controllerSerialNu
                 std::string activeStr = jsonRoot[i].get("Active", "").asString();
                 update.Active = false;
                 if (activeStr.compare("true") == 0) update.Active = true;
+
+                // Convert 'tagged' from dotNet boolean
+                std::string taggedStr = jsonRoot[i].get("Tagged", "").asString();
+                update.Tagged = false;
+                if (taggedStr.compare("true") == 0) update.Tagged = true;
 
                 update.UtcTicks = jsonRoot[i].get("DateTimeUtcTicks", "").asUInt64();
                 updates.push_back(update);

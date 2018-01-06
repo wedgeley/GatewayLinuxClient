@@ -8,7 +8,15 @@ struct KeyUpdate
 {
     char* KeyCode;
     bool Active;
+    bool Tagged;
     unsigned long long UtcTicks;
+};
+
+// Key entry record
+struct KeyEntry
+{
+    char* KeyCode;
+    bool Tagged;
 };
 
 
@@ -37,7 +45,7 @@ GatewayReturnCodes FetchPageOfKeys(
     const char* controllerSerialNumber,
     const char* inPageMarker,
     char* outPageMarker,
-    char* buffer[],
+    struct KeyEntry* buffer[],
     size_t keycodeSize,
     uint pageSize,
     int* returnedKeyCount);

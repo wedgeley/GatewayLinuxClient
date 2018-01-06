@@ -61,6 +61,7 @@ bool DisplayKeyUpdates(const char* url, const char* entrancePanel, unsigned long
                 else if (buffer[i]->Active)
                 {
                     fprintf(stdout, "\t+ Added %s on %s", buffer[i]->KeyCode, asctime(tm));       // asctime returns string ending with newline
+                    if (buffer[i]->Tagged) fprintf(stdout, " (TAGGED) ");
                 }
                 else
                 {

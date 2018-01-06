@@ -33,11 +33,15 @@ bool DisplayAllKeys(const char* url, const char* entrancePanel, unsigned long lo
         fprintf(stdout, "The Gateway last sync-ed to the cloud at %s\n", asctime(tm));           // asctime returns string ending with newline
     }
 
-    // Allocate a buffer for a page of key codes from stack memory
-    char keys[KEYCODE_PAGE_SIZE][KEYCODE_LENGTH];
-    char* buffer[KEYCODE_PAGE_SIZE];
+    // Allocate memory for a page of key entries from the stack
     int i;
-    for (i = 0 ; i < KEYCODE_PAGE_SIZE ; i++) buffer[i] = keys[i];
+    char keys[KEYCODE_PAGE_SIZE][KEYCODE_LENGTH + 1];           // Allocates memory for the key codes
+    struct KeyEntry keyentries[KEYCODE_PAGE_SIZE];                // Allocates memory for the key entry structures
+    for (i = 0 ; i < KEYCODE_PAGE_SIZE ; i++) keyentries[i].KeyCode = keys[i];
+
+    // To pass into the function, convert to an array of pointers
+    struct KeyEntry *buffer[KEYCODE_PAGE_SIZE];
+    for (i = 0 ; i < KEYCODE_PAGE_SIZE ; i++) buffer[i] = &keyentries[i];
 
     int keyCount = 0;
     int pageNumber = 1;
@@ -53,7 +57,9 @@ bool DisplayAllKeys(const char* url, const char* entrancePanel, unsigned long lo
             fprintf(stdout, "Page %d.  %d key(s) returned\n", pageNumber, keyCount);
             for (i = 0 ; i < keyCount ; i++)
             {
-                fprintf(stdout, "\t%s\n", buffer[i]);
+                fprintf(stdout, "\t%s", buffer[i]->KeyCode);
+                if (buffer[i]->Tagged) fprintf(stdout, " (TAGGED)");
+                fprintf(stdout, "\n");
             }
             fprintf(stdout, "\n");
 

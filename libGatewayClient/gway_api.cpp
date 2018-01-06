@@ -64,7 +64,7 @@ GatewayReturnCodes FetchPageOfKeys(
     const char* controllerSerialNumber,
     const char* inPageMarker,
     char* outPageMarker,
-    char* buffer[],
+    struct KeyEntry* buffer[],
     size_t keyCodeSize,
     uint pageSize,
     int* returnedKeyCount)
@@ -73,23 +73,24 @@ GatewayReturnCodes FetchPageOfKeys(
     *returnedKeyCount = 0;
     GatewayClient client(url);
 
-    std::vector<std::string> keycodes;
+    std::vector<KeyEntryItem> keyentries;
     std::string outPageMarkerStr;
-    status = client.FetchPageOfKeys(controllerSerialNumber, inPageMarker, pageSize, keycodes, outPageMarkerStr);
+    status = client.FetchPageOfKeys(controllerSerialNumber, inPageMarker, pageSize, keyentries, outPageMarkerStr);
 
     if (IsSuccess(status))
     {
         // Copy key codes into the supplied buffer
-        *returnedKeyCount = keycodes.size();
-        for (uint i=0 ; i < keycodes.size(); i++)
+        *returnedKeyCount = keyentries.size();
+        for (uint i=0 ; i < keyentries.size(); i++)
         {
-            if (keycodes[i].length() > (keyCodeSize - 1))
+            if (keyentries[i].KeyCode.length() > (keyCodeSize - 1))
             {
                 status = GWAY_BUFFER_TOO_SMALL;
             }
             else
             {
-                strcpy(buffer[i], keycodes[i].c_str());
+                strcpy(buffer[i]->KeyCode, keyentries[i].KeyCode.c_str());
+                buffer[i]->Tagged = keyentries[i].Tagged;
             }
         }
     }
@@ -136,8 +137,9 @@ GatewayReturnCodes FetchKeyUpdates(
             }
             else
             {
-                buffer[i]->Active = updates[i].Active;
                 strcpy(buffer[i]->KeyCode, updates[i].KeyCode.c_str());
+                buffer[i]->Active = updates[i].Active;
+                buffer[i]->Tagged = updates[i].Tagged;
                 buffer[i]->UtcTicks = updates[i].UtcTicks;
             }
         }

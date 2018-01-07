@@ -34,6 +34,7 @@ class GatewayClient
         GatewayReturnCodes LookupGatewayLastSyncTime(unsigned long long* utcTicks);
         GatewayReturnCodes FetchPageOfKeys(const char* controllerSerialNumber, const char* inPageMarker, int pageSize, std::vector<KeyEntryItem>& keyentries, std::string& outPageMarker);
         GatewayReturnCodes FetchKeyUpdates(const char* controllerSerialNumber, unsigned long long timeOfLastUpdate, int pageSize, std::vector<KeyUpdateItem>& updates);
+        GatewayReturnCodes FetchApartments(const char* controllerSerialNumber, std::vector<ApartmentItem>& apartments);
 
     protected:
 

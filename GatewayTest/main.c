@@ -5,6 +5,7 @@
 
 #include "../libGatewayClient/include/gway_api.h"
 #include "displaySerialNumber.h"
+#include "displayApartments.h"
 #include "displayAllKeycodes.h"
 #include "displayKeyUpdates.h"
 
@@ -34,6 +35,13 @@ int main()
 
     // This is the last time the Gateway sync-ed with the cloud
     unsigned long long utcCloudSyncTicks;
+
+    if (ok)
+    {
+        // All apartments for this controller
+        fprintf(stdout, "------------------------\n");
+        ok = DisplayApartments(url, entrancePanel);
+    }
 
     if (ok)
     {

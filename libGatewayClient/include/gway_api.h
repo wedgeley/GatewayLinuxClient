@@ -19,6 +19,13 @@ struct KeyEntry
     bool Tagged;
 };
 
+// Apartment entry record
+struct ApartmentEntry
+{
+    int ApartmentNumber;
+    bool DivertToConcierge;
+};
+
 
 #ifdef __cplusplus
 extern "C"
@@ -62,6 +69,17 @@ GatewayReturnCodes FetchKeyUpdates(
     size_t keyCodeSize,
     uint pageSize,
     int* returnedKeyCount);
+
+
+#ifdef __cplusplus
+extern "C"
+#endif // __cplusplus
+GatewayReturnCodes FetchApartments(
+    const char* url,
+    const char* controllerSerialNumber,
+    struct ApartmentEntry* buffer[],
+    uint bufferSize,
+    int* returnedApartmentCount);
 
 
 #ifdef __cplusplus

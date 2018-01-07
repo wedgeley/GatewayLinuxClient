@@ -148,6 +148,44 @@ GatewayReturnCodes FetchKeyUpdates(
     return status;
 }
 
+//
+// Requests all apartments for the controller with the specified serial number
+//
+extern "C"
+GatewayReturnCodes FetchApartments(
+    const char* url,
+    const char* controllerSerialNumber,
+    struct ApartmentEntry* buffer[],
+    uint bufferSize,
+    int* returnedApartmentCount)
+{
+    GatewayReturnCodes status = GWAY_SUCCESS;
+    *returnedApartmentCount = 0;
+    GatewayClient client(url);
+
+    std::vector<ApartmentItem> apartmentItems;
+    status = client.FetchApartments(controllerSerialNumber, apartmentItems);
+
+    if (IsSuccess(status) && apartmentItems.size() > bufferSize)
+    {
+        status = GWAY_ARRAY_TOO_SMALL;
+    }
+
+    if (IsSuccess(status))
+    {
+        // Copy apartments into the supplied buffer
+        *returnedApartmentCount = apartmentItems.size();
+        for (uint i=0 ; i < apartmentItems.size(); i++)
+        {
+            buffer[i]->ApartmentNumber = apartmentItems[i].ApartmentNumber;
+            buffer[i]->DivertToConcierge = apartmentItems[i].DivertToConcierge;
+        }
+    }
+
+    return status;
+}
+
+
 
 //
 //  Start listening for UDP key update messages

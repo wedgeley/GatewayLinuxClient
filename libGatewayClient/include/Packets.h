@@ -20,4 +20,12 @@ struct KeyUpdateItem
     unsigned long long UtcTicks;
 };
 
+// Apartment record
+struct ApartmentItem
+{
+    std::string ApartmentId;
+    int ApartmentNumber;
+    bool DivertToConcierge;
+};
+
 #endif // PACKETS_H_INCLUDED

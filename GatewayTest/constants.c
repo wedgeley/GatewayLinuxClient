@@ -8,5 +8,7 @@ const size_t KEYCODE_PAGE_SIZE = 10;                // Number of key codes to fe
 
 const int MAX_PAGES_TO_DISPLAY = 10;                // Never display more than this many pages
 
+const size_t MAX_APARTMENTS = 256;                     // Cannot handle more than this many apartments
+
 const unsigned long long UNIXEPOCH = 0x089f7ff5f7b58000LL;    // Thursday, January 01, 1970 12:00:00 AM
 

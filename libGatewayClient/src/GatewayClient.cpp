@@ -149,6 +149,47 @@ GatewayReturnCodes GatewayClient::FetchKeyUpdates(const char* controllerSerialNu
     return status;
 }
 
+//
+//  Fetches all apartments from the Gateway
+//
+GatewayReturnCodes GatewayClient::FetchApartments(
+    const char* controllerSerialNumber,
+    std::vector<ApartmentItem>& apartments)
+{
+    GatewayReturnCodes status = GWAY_SUCCESS;
+
+    std::vector<ParameterValue> parameters;
+    ParameterValue parameter1("ControllerSerialNumber", controllerSerialNumber);
+    parameters.push_back(parameter1);
+
+    Json::Value jsonRoot;
+    status = PerformLookup(TIMEOUT_DATA_SECS, "Apartment", "Listall", parameters, jsonRoot);
+    if (status == GWAY_SUCCESS)
+    {
+        if (jsonRoot.isArray())
+        {
+            for (uint i=0 ; i < jsonRoot.size(); i++)
+            {
+                ApartmentItem entry;
+                entry.ApartmentId = jsonRoot[i].get("ApartmentId", "").asString();
+
+                // Convert 'ApartmentNumber' from string to integer
+                std::string apartmentNumberStr = jsonRoot[i].get("ApartmentNumber", "").asString();
+                entry.ApartmentNumber = atoi(apartmentNumberStr.c_str());
+
+                // Convert 'DivertToConcierge' from dotNet boolean
+                std::string divertStr = jsonRoot[i].get("DivertToConcierge", "").asString();
+                entry.DivertToConcierge = false;
+                if (divertStr.compare("true") == 0) entry.DivertToConcierge = true;
+
+                apartments.push_back(entry);
+            }
+        }
+    }
+
+    return status;
+}
+
 
 //
 //  Performs a lookup and returns the resulting JSON value

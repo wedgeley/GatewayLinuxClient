@@ -47,6 +47,10 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="displayAllKeycodes.h" />
+		<Unit filename="displayApartments.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="displayApartments.h" />
 		<Unit filename="displayKeyUpdates.c">
 			<Option compilerVar="CC" />
 		</Unit>

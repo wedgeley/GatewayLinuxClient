@@ -14,7 +14,7 @@ UDPListener::UDPListener()
 //  Listen on the specified UDP port and calls the supplied function when a message is received
 //  Returns FALSE if any error
 //
-GatewayReturnCodes UDPListener::Listen(int port, void (*functionPtr)())
+GatewayReturnCodes UDPListener::Listen(int port, void (*functionPtr)(const char* reason))
 {
     sockaddr_in si_me, si_other;
     int s = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP);
@@ -59,7 +59,7 @@ GatewayReturnCodes UDPListener::Listen(int port, void (*functionPtr)())
         unsigned slen = sizeof(sockaddr);
         if (recvfrom(s, buf, sizeof(buf)-1, 0, (sockaddr *)&si_other, &slen) > 0)
         {
-            (*functionPtr)();
+            (*functionPtr)(buf);
         }
     }
 

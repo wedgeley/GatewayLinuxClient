@@ -8,7 +8,7 @@ class UDPListener
 {
     public:
         UDPListener();
-        GatewayReturnCodes Listen(int port, void (*functionPtr)());
+        GatewayReturnCodes Listen(int port, void (*functionPtr)(const char* reason));
         void Stop();
         virtual ~UDPListener();
 

@@ -9,7 +9,7 @@
 #include "displayAllKeycodes.h"
 #include "displayKeyUpdates.h"
 
-const char* DEFAULT_URL = "http://192.168.2.2:8080";
+const char* DEFAULT_URL = "http://192.168.1.19:8080";
 const char* DEFAULT_ENTRANCEPANEL = "ENTRANCE001";
 
 // Function prototypes
@@ -117,8 +117,20 @@ void ListenForUpdates()
 //
 //  Function to be called when we are notified that an update is received
 //
-void UpdateAvailable()
+void UpdateAvailable(const char* reason)
 {
-    fprintf(stdout, "\nKey updates are available...\n");
-    DisplayKeyUpdates(url, entrancePanel, 0);
+    if (strncmp(reason, "KeyUpd", 6) == 0)
+    {
+        fprintf(stdout, "\nKey updates are available...\n");
+        DisplayKeyUpdates(url, entrancePanel, 0);
+    }
+    else if (strncmp(reason, "LocDat", 6) == 0)
+    {
+        fprintf(stdout, "\nLocal updates are available...\n");
+        DisplayApartments(url, entrancePanel);
+    }
+    else
+    {
+        fprintf(stdout, "\nUnrecognized update (%s)...\n", reason);
+    }
 }

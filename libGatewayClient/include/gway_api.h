@@ -86,7 +86,7 @@ GatewayReturnCodes FetchApartments(
 extern "C"
 #endif // __cplusplus
 GatewayReturnCodes RegisterForUpdateNotification(
-    void (*functionPtr)());
+    void (*functionPtr)(const char* reason));
 
 
 #ifdef __cplusplus

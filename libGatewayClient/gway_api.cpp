@@ -193,7 +193,7 @@ GatewayReturnCodes FetchApartments(
 //
 extern "C"
 GatewayReturnCodes RegisterForUpdateNotification(
-    void (*functionPtr)())
+    void (*functionPtr)(const char* reason))
 {
     // Create a thread for the UDP listener
     int iret = pthread_create(&udpThread, NULL, OnRunUDPListener, (void*) functionPtr);
@@ -212,8 +212,8 @@ GatewayReturnCodes RegisterForUpdateNotification(
 //
 void *OnRunUDPListener(void *ptr)
 {
-    void (*functionPtr)();
-    functionPtr = (void (*)())ptr;
+    void (*functionPtr)(const char* reason);
+    functionPtr = (void (*)(const char*))ptr;
     GatewayReturnCodes status = keyUpdateUDPListener.Listen(KEY_UPDATES_UDP_PORT, functionPtr);
 
     if (!IsSuccess(status))
